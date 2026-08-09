@@ -36,9 +36,9 @@ jobs:
         if [ -f "VidyaTest_logo_512x512.png" ]; then
           cp VidyaTest_logo_512x512.png app/www/VidyaTest_logo_512x512.png
           cp VidyaTest_logo_512x512.png app/www/icon.png
-          sed -i '/<\/widget>/i \    <icon src="www/icon.png" />' app/config.xml
-          sed -i '/<\/widget>/i \    <preference name="ShowSplashScreen" value="false" />' app/config.xml
-          sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="0" />' app/config.xml
+          sed -i 's|</widget>|    <icon src="www/icon.png" />\n</widget>|' app/config.xml
+          sed -i 's|</widget>|    <preference name="ShowSplashScreen" value="false" />\n</widget>|' app/config.xml
+          sed -i 's|</widget>|    <preference name="SplashScreenDelay" value="0" />\n</widget>|' app/config.xml
         fi
         
         cd app
