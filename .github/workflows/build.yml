@@ -21,13 +21,16 @@ jobs:
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: '17'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
 
     - name: Build Cordova APK
       run: |
         npm install -g cordova
-        cordova create app com.vidyatest.app "VidyaTest"
+        cordova create app com.vidyatest.app VidyaTest
         
         # Copy HTML & Images
         cp index.html app/www/index.html
