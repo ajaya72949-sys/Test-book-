@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrepPortal Pro - Admin Dashboard</title>
+    <title>विद्या Test - Admin Dashboard</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -61,6 +61,7 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
         }
+
         .top-nav .logo { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
         .view-switcher { display: flex; background: rgba(255, 255, 255, 0.2); padding: 2px; border-radius: 20px; }
         .view-btn { border: none; background: transparent; color: white; padding: 4px 12px; border-radius: 16px; font-weight: 600; font-size: 12px; cursor: pointer; }
@@ -206,14 +207,116 @@
         .smart-box{ width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:12px; outline:none; resize:vertical; min-height:90px; }
         .smart-box:focus{ border-color:var(--primary); }
 
-        /* small status */
-        #realtimeStatus { font-size: 11px; color: #64748b; margin-left: 10px; }
+        /* Splash Screen */
+        #splashScreen{
+            position: fixed;
+            inset: 0;
+            background: #020617; /* bg-slate-950 */
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 24px;
+            opacity: 1;
+            transition: opacity 0.7s ease;
+        }
+        .splash-logo{
+            width: 44px; height: 44px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(99,102,241,0.35);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.10), 0 0 24px rgba(99,102,241,0.35);
+            animation: splashPulse 1.35s ease-in-out infinite;
+        }
+        .splash-logo::before{
+            content:"";
+            width: 16px; height: 16px; border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, #a78bfa, #4f46e5);
+            box-shadow: 0 0 25px rgba(167,139,250,0.65);
+            animation: splashGlow 1.35s ease-in-out infinite;
+        }
+        .splash-title{
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 14px;
+            letter-spacing: 0.2px;
+        }
+        .splash-tagline{
+            color: #818cf8;
+            font-size: 0.75rem;
+            margin-top: 6px;
+        }
+        .splash-bottom{
+            position: absolute;
+            bottom: 22px;
+            left: 0; right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .splash-powered{
+            color: #64748b;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .splash-name{
+            font-weight: 800;
+            background: linear-gradient(to right, #ec4899, #fbbf24, #22d3ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 18px rgba(34,211,238,0.35);
+            animation: neonPulse 1.6s ease-in-out infinite;
+        }
+        @keyframes splashPulse{
+            0%,100%{ transform: scale(1); box-shadow: 0 0 0 4px rgba(99,102,241,0.10), 0 0 24px rgba(99,102,241,0.35); }
+            50%{ transform: scale(1.07); box-shadow: 0 0 0 6px rgba(99,102,241,0.18), 0 0 34px rgba(99,102,241,0.55); }
+        }
+        @keyframes splashGlow{
+            0%,100%{ transform: scale(1); opacity: 0.95; }
+            50%{ transform: scale(1.25); opacity: 1; }
+        }
+        @keyframes neonPulse{
+            0%,100%{ filter: drop-shadow(0 0 6px rgba(236,72,153,0.22)); }
+            50%{ filter: drop-shadow(0 0 16px rgba(34,211,238,0.35)); }
+        }
+
+        /* Hide realtime status as requested */
+        #realtimeStatus { display: none !important; }
+
+        /* Colorful विद्या Test (top header) */
+        .logo-brand {
+            font-weight: 800;
+            background: linear-gradient(90deg, #22d3ee, #a78bfa, #fb7185, #fbbf24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 18px rgba(167,139,250,0.25);
+        }
     </style>
 </head>
 <body>
 
+    <!-- Splash Screen Overlay -->
+    <div id="splashScreen" aria-hidden="true">
+        <div class="splash-logo" title="विद्याTest"></div>
+        <div class="splash-title">विद्याTest</div>
+        <div class="splash-tagline">सीखें • अभ्यास करें • सफल बनें</div>
+
+        <div class="splash-bottom">
+            <div class="splash-powered">POWERED BY</div>
+            <div class="splash-name">AJAY [AJ]</div>
+        </div>
+    </div>
+
     <header class="top-nav">
-        <div class="logo"><i class="fa-solid fa-graduation-cap"></i> PrepPortal Pro</div>
+        <div class="logo"><i class="fa-solid fa-graduation-cap"></i> <span class="logo-brand">विद्याTest</span></div>
         <div class="view-switcher">
             <button class="view-btn active" onclick="switchView('app-view', this)">Student</button>
             <button class="view-btn" onclick="switchView('admin-view', this); populateAdminDropdowns();">Admin Panel</button>
@@ -229,7 +332,7 @@
                     <div class="user-profile">
                         <div class="avatar"><i class="fa-solid fa-user"></i></div>
                         <div class="greeting">
-                            <h4>नमस्ते, राहुल 👋</h4>
+                            <h4>नमस्ते, विद्याTest 👋</h4>
                             <p>Aspirant</p>
                         </div>
                     </div>
@@ -422,7 +525,6 @@
         <!-- ADMIN PANEL VIEW -->
         <div id="admin-view" class="view-container">
             <div class="admin-main">
-                
                 <!-- 1. CREATE NEW BATCH -->
                 <div class="admin-card">
                     <h3>1. नया बैच बनाएं (Create Batch)</h3>
@@ -599,6 +701,39 @@
     </div>
 
     <script>
+        // ============ Splash Timing ============
+        window.addEventListener('DOMContentLoaded', () => {
+            const splash = document.getElementById('splashScreen');
+            if (!splash) return;
+
+            setTimeout(() => {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 700);
+            }, 2000);
+        });
+
+        // ============ Admin Password Protection ============
+        const ADMIN_PASSWORD = "VidyaTest@321";
+        const ADMIN_SESSION_KEY = "admin_auth_unlocked";
+        let adminUnlockedCache = sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
+
+        function isAdminUnlocked() {
+            return adminUnlockedCache || sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
+        }
+
+        function unlockAdminWithPassword() {
+            const pwd = window.prompt("एडमिन पैनल के लिए पासवर्ड डालें:");
+            if (pwd === null) return false;
+            if (pwd === ADMIN_PASSWORD) {
+                adminUnlockedCache = true;
+                sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+                return true;
+            }
+            return false;
+        }
+
         // ============ Default seed data (used only if DB is empty) ============
         let localData = {
             batches: [
@@ -660,12 +795,12 @@
         function setRealtimeStatus(text, color) {
             const el = document.getElementById('realtimeStatus');
             if (!el) return;
+            // hidden via CSS; keep function no-op safe
             el.innerText = text;
             el.style.color = color || '#64748b';
         }
 
         function ensureDbSeedIfEmpty() {
-            // if DB has no data, write seed localData once
             return db.ref(APP_DATA_PATH).once('value').then(snap => {
                 if (!snap.exists() || !snap.val()) {
                     return db.ref(APP_DATA_PATH).set(localData);
@@ -688,7 +823,6 @@
                         localData = { batches: [] };
                     }
 
-                    // rerender UI
                     renderAppBatches();
                     populateAdminDropdowns();
 
@@ -703,12 +837,9 @@
         }
 
         function saveToDb() {
-            // Write the entire data tree to keep it simple
-            // (For large data, better to write incremental paths)
             return db.ref(APP_DATA_PATH).set(localData);
         }
 
-        // Simple debounce for frequent updates
         let saveTimer = null;
         function scheduleSaveToDb() {
             if (saveTimer) clearTimeout(saveTimer);
@@ -738,6 +869,29 @@
         let timerInterval = null;
 
         function switchView(viewId, btn) {
+            // Admin protection
+            if (viewId === 'admin-view') {
+                if (!isAdminUnlocked()) {
+                    const ok = unlockAdminWithPassword();
+                    if (!ok) {
+                        alert("गलत पासवर्ड! एडमिन पैनल एक्सेस करने की अनुमति नहीं है।");
+
+                        const studentView = document.getElementById('app-view');
+                        if (studentView) studentView.classList.add('active');
+
+                        document.querySelectorAll('.view-container').forEach(el => {
+                            if (el.id !== 'app-view') el.classList.remove('active');
+                        });
+                        document.querySelectorAll('.view-btn').forEach(el => el.classList.remove('active'));
+                        if (btn) {
+                            const studentBtn = document.querySelectorAll('.view-btn')[0];
+                            if (studentBtn) studentBtn.classList.add('active');
+                        }
+                        return;
+                    }
+                }
+            }
+
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.view-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
@@ -1277,7 +1431,7 @@
             populateAdminDropdowns();
             renderAppBatches();
 
-            scheduleSaveToDb(); // ✅ realtime save
+            scheduleSaveToDb();
             alert(`बैच "${val}" जोड़ दिया गया!`);
         }
 
@@ -1319,7 +1473,7 @@
             });
 
             populateAdminDropdowns();
-            scheduleSaveToDb(); // ✅ realtime save
+            scheduleSaveToDb();
             alert(`टेस्ट "${testName}" [+${positiveMark} / -${negativeMark}] के साथ बना दिया गया!`);
         }
 
@@ -1530,7 +1684,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             clearQuestionForm();
             renderQuestionsForSelectedTest();
 
-            scheduleSaveToDb(); // ✅ realtime save
+            scheduleSaveToDb();
         }
 
         function clearQuestionForm() {
@@ -1635,7 +1789,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
 
             test.questions.splice(index, 1);
             renderQuestionsForSelectedTest();
-            scheduleSaveToDb(); // ✅ realtime save
+            scheduleSaveToDb();
             alert("प्रश्न हटा दिया गया है!");
         }
 
@@ -1696,7 +1850,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
                     populateAdminDropdowns();
                     renderAppBatches();
 
-                    scheduleSaveToDb(); // ✅ realtime save
+                    scheduleSaveToDb();
                     alert(`सफलतापूर्वक ${formattedQuestions.length} प्रश्न डेटाबेस में जोड़ दिए गए हैं!`);
                     document.getElementById('importCodeInput').value = '';
                 } else {
