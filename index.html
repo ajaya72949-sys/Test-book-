@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpuckLWDFi5JH2WzQqbLidK99R-LjNFSA",
+    authDomain: "testbook-123.firebaseapp.com",
+    projectId: "testbook-123",
+    storageBucket: "testbook-123.firebasestorage.app",
+    messagingSenderId: "404654379054",
+    appId: "1:404654379054:web:d7a3482958061c248c4fbf",
+    measurementId: "G-QH85GK4MXX"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrepPortal Pro - Admin Dashboard</title>
