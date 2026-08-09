@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpuckLWDFi5JH2WzQqbLidK99R-LjNFSA",
-    authDomain: "testbook-123.firebaseapp.com",
-    projectId: "testbook-123",
-    storageBucket: "testbook-123.firebasestorage.app",
-    messagingSenderId: "404654379054",
-    appId: "1:404654379054:web:d7a3482958061c248c4fbf",
-    measurementId: "G-QH85GK4MXX"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrepPortal Pro - Admin Dashboard</title>
+    
+    <!-- Firebase SDK -->
+   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8FvosXdbSOMVX1KBa5UyD-AGd37-prCk",
+    authDomain: "create-project2-61435.firebaseapp.com",
+    databaseURL: "https://create-project2-61435-default-rtdb.firebaseio.com",
+    projectId: "create-project2-61435",
+    storageBucket: "create-project2-61435.firebasestorage.app",
+    messagingSenderId: "1067677167165",
+    appId: "1:1067677167165:web:28e12e04a8716127b78454",
+    measurementId: "G-KK4WK7D9YJ"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.database();
+</script>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -578,7 +585,7 @@
     </div>
 
     <script>
-        let db = {
+        let localData = {
             batches: [
                 {
                     id: 'batch_bssc_cgl',
@@ -666,7 +673,7 @@
         function renderAppBatches() {
             const container = document.getElementById('batchContainer');
             container.innerHTML = '';
-            db.batches.forEach(b => {
+            localData.batches.forEach(b => {
                 container.innerHTML += `
                     <div class="category-card" onclick="openBatchSyllabus('${b.id}')">
                         <div class="cat-icon" style="background: #4f46e5;"><i class="fa-solid fa-graduation-cap"></i></div>
@@ -676,7 +683,7 @@
         }
 
         function openBatchSyllabus(batchId) {
-            const batch = db.batches.find(b => b.id === batchId);
+            const batch = localData.batches.find(b => b.id === batchId);
             document.getElementById('selected-batch-title').innerText = batch.name;
             const container = document.getElementById('subject-container');
             container.innerHTML = '';
@@ -691,7 +698,7 @@
         }
 
         function openChapters(batchId, subjectId) {
-            const batch = db.batches.find(b => b.id === batchId);
+            const batch = localData.batches.find(b => b.id === batchId);
             const sub = batch.subjects.find(s => s.id === subjectId);
             document.getElementById('selected-subject-title').innerText = sub.name;
             const container = document.getElementById('chapter-container');
@@ -707,7 +714,7 @@
         }
 
         function openTests(batchId, subjectId, chapterId) {
-            const batch = db.batches.find(b => b.id === batchId);
+            const batch = localData.batches.find(b => b.id === batchId);
             const sub = batch.subjects.find(s => s.id === subjectId);
             const chap = sub.chapters.find(c => c.id === chapterId);
             document.getElementById('selected-chapter-title').innerText = chap.name;
@@ -724,7 +731,7 @@
         }
 
         function startTest(bId, sId, cId, tId) {
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch.subjects.find(s => s.id === sId);
             const chap = sub.chapters.find(c => c.id === cId);
             const test = chap.tests.find(t => t.id === tId);
@@ -1163,7 +1170,7 @@
             smartBatchSel.innerHTML = '';
             promptBatchSel.innerHTML = '';
 
-            db.batches.forEach(b => {
+            localData.batches.forEach(b => {
                 batchSel.innerHTML += `<option value="${b.id}">${b.name}</option>`;
                 smartBatchSel.innerHTML += `<option value="${b.id}">${b.name}</option>`;
                 promptBatchSel.innerHTML += `<option value="${b.id}">${b.name}</option>`;
@@ -1178,7 +1185,7 @@
             const val = document.getElementById('newBatchInput').value.trim();
             if (!val) return;
 
-            db.batches.push({ id: 'batch_' + Date.now(), name: val, subjects: [] });
+            localData.batches.push({ id: 'batch_' + Date.now(), name: val, subjects: [] });
             document.getElementById('newBatchInput').value = '';
             populateAdminDropdowns();
             renderAppBatches();
@@ -1195,7 +1202,7 @@
             const positiveMark = document.getElementById('newPositiveMarkInput').value;
             const negativeMark = document.getElementById('newNegativeMarkInput').value;
 
-            let batch = db.batches.find(b => b.id === batchId);
+            let batch = localData.batches.find(b => b.id === batchId);
             if (!batch) return;
 
             let sub = batch.subjects.find(s => s.name.toLowerCase() === subName.toLowerCase());
@@ -1228,7 +1235,7 @@
             if (!subSel) return;
             subSel.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             if (batch && batch.subjects.length > 0) {
                 batch.subjects.forEach(s => { subSel.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
             }
@@ -1242,7 +1249,7 @@
             if (!chapSel) return;
             chapSel.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
 
             if (sub && sub.chapters.length > 0) {
@@ -1259,7 +1266,7 @@
             if (!testSel) return;
             testSel.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
             const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
 
@@ -1275,7 +1282,7 @@
             if (!subSel) return;
             subSel.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             if (batch && batch.subjects.length > 0) {
                 batch.subjects.forEach(s => { subSel.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
             }
@@ -1289,7 +1296,7 @@
             if (!chapSel) return;
             chapSel.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
 
             if (sub && sub.chapters.length > 0) {
@@ -1306,7 +1313,7 @@
             if (!testSel) return;
             testSel.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
             const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
 
@@ -1322,7 +1329,7 @@
             const tId = document.getElementById('promptTestSelect').value;
             const count = document.getElementById('promptQCount').value || 5;
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
             const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
             const test = chap ? chap.tests.find(t => t.id === tId) : null;
@@ -1397,7 +1404,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const ans = parseInt(document.getElementById('correctAns').value);
             const solText = document.getElementById('solutionText').value;
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch.subjects.find(s => s.id === sId);
             const chap = sub.chapters.find(c => c.id === cId);
             const test = chap.tests.find(t => t.id === tId);
@@ -1452,7 +1459,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             if (!container) return;
             container.innerHTML = '';
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
             const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
             const test = chap ? chap.tests.find(t => t.id === tId) : null;
@@ -1486,7 +1493,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const cId = document.getElementById('smartChapterSelect').value;
             const tId = document.getElementById('smartTestSelect').value;
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch.subjects.find(s => s.id === sId);
             const chap = sub.chapters.find(c => c.id === cId);
             const test = chap.tests.find(t => t.id === tId);
@@ -1519,7 +1526,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const cId = document.getElementById('smartChapterSelect').value;
             const tId = document.getElementById('smartTestSelect').value;
 
-            const batch = db.batches.find(b => b.id === bId);
+            const batch = localData.batches.find(b => b.id === bId);
             const sub = batch.subjects.find(s => s.id === sId);
             const chap = sub.chapters.find(c => c.id === cId);
             const test = chap.tests.find(t => t.id === tId);
@@ -1537,10 +1544,10 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
                 const data = JSON.parse(raw);
 
                 if (data.batch && data.questions && Array.isArray(data.questions)) {
-                    let batch = db.batches.find(b => b.name.toLowerCase() === data.batch.toLowerCase());
+                    let batch = localData.batches.find(b => b.name.toLowerCase() === data.batch.toLowerCase());
                     if (!batch) {
                         batch = { id: 'batch_' + Date.now(), name: data.batch, subjects: [] };
-                        db.batches.push(batch);
+                        localData.batches.push(batch);
                     }
 
                     let sub = batch.subjects.find(s => s.name.toLowerCase() === (data.subject || "सामान्य").toLowerCase());
@@ -1592,4 +1599,3 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
     </script>
 </body>
 </html>
-
