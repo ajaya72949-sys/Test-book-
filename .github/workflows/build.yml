@@ -27,19 +27,33 @@ jobs:
     - name: Build Cordova APK
       run: |
         npm install -g cordova
-        # टेक्निकल नाम English में (ताकि एरर न आए)
         cordova create app com.vidyatest.app VidyaTest
         
-        # HTML और इमेज कॉपी करें
+        # HTML और PNG लोगो कॉपी करें
         if [ -f "index.html" ]; then cp index.html app/www/index.html; fi
         if [ -f "VidyaTest_logo_512x512.png" ]; then
+          cp VidyaTest_logo_512x512.png app/www/VidyaTest_logo_512x512.png
           cp VidyaTest_logo_512x512.png app/www/icon.png
         fi
         
-        cd app
-        # यहाँ ऐप का डिस्प्ले नाम 'विद्याTest' सेट किया जा रहा है
-        sed -i 's/<name>.*<\/name>/<name>विद्याTest<\/name>/g' config.xml
+        # Python की मदद से नाम और ऐप का आइकन सुरक्षित रूप से सेट करें
+        python3 -c '
+        with open("app/config.xml", "r") as f:
+            content = f.read()
         
+        # नाम बदलें
+        import re
+        content = re.sub(r"<name>.*?</name>", "<name>विद्याTest</name>", content)
+        
+        # ऐप आइकन का टैग जोड़ें
+        icon_tag = "    <icon src=\"www/icon.png\" />\n"
+        content = content.replace("</widget>", icon_tag + "</widget>")
+        
+        with open("app/config.xml", "w") as f:
+            f.write(content)
+        '
+        
+        cd app
         cordova platform add android
         cordova build android --debug
 
