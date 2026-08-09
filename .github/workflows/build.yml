@@ -8,38 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 18
-
     - name: Setup Java JDK
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
-
-    - name: Build Cordova APK with Custom Name & Exact Logo
+    - name: Build Cordova APK
       run: |
         npm install -g cordova
         cordova create app com.vidyatest.app "विद्याTest"
         cp index.html app/www/index.html
-        
-        # Exact Logo File Check & Injection
         if [ -f "VidyaTest_logo_512x512.png" ]; then
           cp VidyaTest_logo_512x512.png app/www/icon.png
           sed -i '/<\/widget>/i \    <icon src="www/icon.png" />' app/config.xml
         fi
-        
         cd app
         cordova platform add android
         cordova build android --debug
-
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
