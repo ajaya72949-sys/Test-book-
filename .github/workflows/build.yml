@@ -24,11 +24,20 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Build Cordova APK
+    - name: Build Cordova APK with Hindi Name & Custom Icon
       run: |
         npm install -g cordova
-        cordova create app com.vidyatest.app "VidyaTest"
+        # 'VidyaTest' की जगह नाम 'विद्याTest' कर दिया गया है
+        cordova create app com.vidyatest.app "विद्याTest"
         cp index.html app/www/index.html
+        
+        # Copy Icon to Cordova res folder
+        if [ -f "icon.png" ]; then
+          mkdir -p app/res
+          cp icon.png app/res/icon.png
+          echo '<icon src="res/icon.png" />' >> app/config.xml
+        fi
+        
         cd app
         cordova platform add android
         cordova build android --debug
