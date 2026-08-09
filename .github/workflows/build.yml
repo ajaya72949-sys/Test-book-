@@ -27,26 +27,15 @@ jobs:
     - name: Build Cordova APK
       run: |
         npm install -g cordova
-        cordova create app com.vidyatest.app "विद्याTest"
+        cordova create app com.vidyatest.app "VidyaTest"
         
-        # Copy HTML file
+        # Copy HTML & Images
         cp index.html app/www/index.html
         
-        # Copy Image file
         if [ -f "VidyaTest_logo_512x512.png" ]; then
           cp VidyaTest_logo_512x512.png app/www/VidyaTest_logo_512x512.png
           cp VidyaTest_logo_512x512.png app/www/icon.png
         fi
-        
-        # Safely update config.xml using Python
-        python3 -c '
-        with open("app/config.xml", "r") as f:
-            content = f.read()
-        insert_str = "    <icon src=\"www/icon.png\" />\n    <preference name=\"ShowSplashScreen\" value=\"false\" />\n    <preference name=\"SplashScreenDelay\" value=\"0\" />\n"
-        content = content.replace("</widget>", insert_str + "</widget>")
-        with open("app/config.xml", "w") as f:
-            f.write(content)
-        '
         
         cd app
         cordova platform add android
