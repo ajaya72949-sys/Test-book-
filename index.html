@@ -6,26 +6,36 @@
     <title>PrepPortal Pro - Admin Dashboard</title>
     
     <!-- Firebase SDK -->
-   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyB8FvosXdbSOMVX1KBa5UyD-AGd37-prCk",
-    authDomain: "create-project2-61435.firebaseapp.com",
-    databaseURL: "https://create-project2-61435-default-rtdb.firebaseio.com",
-    projectId: "create-project2-61435",
-    storageBucket: "create-project2-61435.firebasestorage.app",
-    messagingSenderId: "1067677167165",
-    appId: "1:1067677167165:web:28e12e04a8716127b78454",
-    measurementId: "G-KK4WK7D9YJ"
-  };
+    <!-- ✅ Realtime Database SDKs (Compat Version for CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.database();
-</script>
+    <script>
+      // ======= FIREBASE CONFIG (Realtime Database) =======
+      const firebaseConfig = {
+        apiKey: "AIzaSyB8FvosXdbSOMVX1KBa5UyD-AGd37-prCk",
+        authDomain: "create-project2-61435.firebaseapp.com",
+        databaseURL: "https://create-project2-61435-default-rtdb.firebaseio.com",
+        projectId: "create-project2-61435",
+        storageBucket: "create-project2-61435.firebasestorage.app",
+        messagingSenderId: "1067677167165",
+        appId: "1:1067677167165:web:28e12e04a8716127b78454",
+        measurementId: "G-KK4WK7D9YJ"
+      };
+
+      // Initialize Firebase (only once)
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+
+      // ======= Realtime Database reference =======
+      const db = firebase.database();
+
+      // We'll store everything under: /appData
+      const APP_DATA_PATH = "appData";
+    </script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -195,6 +205,9 @@
         .btn-orange{ background:#f97316; border:none; padding:9px 14px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer; color:white; width:100%; text-align:center; }
         .smart-box{ width:100%; padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:12px; outline:none; resize:vertical; min-height:90px; }
         .smart-box:focus{ border-color:var(--primary); }
+
+        /* small status */
+        #realtimeStatus { font-size: 11px; color: #64748b; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -204,6 +217,7 @@
         <div class="view-switcher">
             <button class="view-btn active" onclick="switchView('app-view', this)">Student</button>
             <button class="view-btn" onclick="switchView('admin-view', this); populateAdminDropdowns();">Admin Panel</button>
+            <span id="realtimeStatus" title="Realtime Database status">Loading…</span>
         </div>
     </header>
 
@@ -585,6 +599,7 @@
     </div>
 
     <script>
+        // ============ Default seed data (used only if DB is empty) ============
         let localData = {
             batches: [
                 {
@@ -638,6 +653,76 @@
             ]
         };
 
+        // ============ Realtime DB Sync ============
+
+        let realtimeReady = false;
+
+        function setRealtimeStatus(text, color) {
+            const el = document.getElementById('realtimeStatus');
+            if (!el) return;
+            el.innerText = text;
+            el.style.color = color || '#64748b';
+        }
+
+        function ensureDbSeedIfEmpty() {
+            // if DB has no data, write seed localData once
+            return db.ref(APP_DATA_PATH).once('value').then(snap => {
+                if (!snap.exists() || !snap.val()) {
+                    return db.ref(APP_DATA_PATH).set(localData);
+                }
+                return null;
+            });
+        }
+
+        function loadFromDbAndListen() {
+            setRealtimeStatus('Realtime loading…', '#2563eb');
+
+            ensureDbSeedIfEmpty()
+              .then(() => {
+                const ref = db.ref(APP_DATA_PATH);
+                ref.on('value', snap => {
+                    const val = snap.val();
+                    if (val && typeof val === 'object') {
+                        localData = val;
+                    } else {
+                        localData = { batches: [] };
+                    }
+
+                    // rerender UI
+                    renderAppBatches();
+                    populateAdminDropdowns();
+
+                    realtimeReady = true;
+                    setRealtimeStatus('Synced (Realtime)', '#059669');
+                });
+              })
+              .catch(err => {
+                console.error(err);
+                setRealtimeStatus('DB sync error', '#dc2626');
+              });
+        }
+
+        function saveToDb() {
+            // Write the entire data tree to keep it simple
+            // (For large data, better to write incremental paths)
+            return db.ref(APP_DATA_PATH).set(localData);
+        }
+
+        // Simple debounce for frequent updates
+        let saveTimer = null;
+        function scheduleSaveToDb() {
+            if (saveTimer) clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => {
+                saveToDb().catch(err => console.error('saveToDb error:', err));
+            }, 250);
+        }
+
+        window.onload = function() {
+            renderAppBatches();
+            populateAdminDropdowns();
+            loadFromDbAndListen();
+        };
+
         let currentActiveTest = null;
         let currentActiveTestQuestions = [];
         let currentQuestionIndex = 0;
@@ -652,16 +737,11 @@
         let remainingSeconds = 0;
         let timerInterval = null;
 
-        window.onload = function() {
-            renderAppBatches();
-            populateAdminDropdowns();
-        };
-
         function switchView(viewId, btn) {
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.view-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            btn.classList.add('active');
+            if (btn) btn.classList.add('active');
         }
 
         function showScreen(screenId) {
@@ -672,8 +752,9 @@
 
         function renderAppBatches() {
             const container = document.getElementById('batchContainer');
+            if (!container) return;
             container.innerHTML = '';
-            localData.batches.forEach(b => {
+            (localData.batches || []).forEach(b => {
                 container.innerHTML += `
                     <div class="category-card" onclick="openBatchSyllabus('${b.id}')">
                         <div class="cat-icon" style="background: #4f46e5;"><i class="fa-solid fa-graduation-cap"></i></div>
@@ -683,11 +764,12 @@
         }
 
         function openBatchSyllabus(batchId) {
-            const batch = localData.batches.find(b => b.id === batchId);
+            const batch = (localData.batches || []).find(b => b.id === batchId);
+            if (!batch) return;
             document.getElementById('selected-batch-title').innerText = batch.name;
             const container = document.getElementById('subject-container');
             container.innerHTML = '';
-            batch.subjects.forEach(sub => {
+            (batch.subjects || []).forEach(sub => {
                 container.innerHTML += `
                     <div class="syllabus-category-card" onclick="openChapters('${batch.id}', '${sub.id}')">
                         <div><h4 style="font-size:13px;"><i class="fa-solid fa-book" style="color:var(--primary); margin-right:6px;"></i>${sub.name}</h4></div>
@@ -698,14 +780,15 @@
         }
 
         function openChapters(batchId, subjectId) {
-            const batch = localData.batches.find(b => b.id === batchId);
-            const sub = batch.subjects.find(s => s.id === subjectId);
+            const batch = (localData.batches || []).find(b => b.id === batchId);
+            const sub = (batch?.subjects || []).find(s => s.id === subjectId);
+            if (!batch || !sub) return;
             document.getElementById('selected-subject-title').innerText = sub.name;
             const container = document.getElementById('chapter-container');
             container.innerHTML = '';
-            sub.chapters.forEach(ch => {
+            (sub.chapters || []).forEach(ch => {
                 container.innerHTML += `
-                    <div class="syllabus-category-card" onclick="openTests('${batchId}', '${subjectId}', '${ch.id}')">
+                    <div class="syllabus-category-card" onclick="openTests('${batch.id}', '${subjectId}', '${ch.id}')">
                         <div><h4 style="font-size:13px;"><i class="fa-solid fa-folder-open" style="color:var(--primary); margin-right:6px;"></i>${ch.name}</h4></div>
                         <i class="fa-solid fa-chevron-right" style="color:#94a3b8; font-size:10px;"></i>
                     </div>`;
@@ -714,16 +797,17 @@
         }
 
         function openTests(batchId, subjectId, chapterId) {
-            const batch = localData.batches.find(b => b.id === batchId);
-            const sub = batch.subjects.find(s => s.id === subjectId);
-            const chap = sub.chapters.find(c => c.id === chapterId);
+            const batch = (localData.batches || []).find(b => b.id === batchId);
+            const sub = (batch?.subjects || []).find(s => s.id === subjectId);
+            const chap = (sub?.chapters || []).find(c => c.id === chapterId);
+            if (!batch || !sub || !chap) return;
             document.getElementById('selected-chapter-title').innerText = chap.name;
             const container = document.getElementById('test-list-container');
             container.innerHTML = '';
-            chap.tests.forEach(t => {
+            (chap.tests || []).forEach(t => {
                 container.innerHTML += `
                     <div class="test-card">
-                        <div><h4>${t.name}</h4><span style="font-size:10px; color:#64748b;">${t.questions.length} Qs | +${t.positiveMarks || 4} / -${t.negativeMarks || 1}</span></div>
+                        <div><h4>${t.name}</h4><span style="font-size:10px; color:#64748b;">${(t.questions || []).length} Qs | +${t.positiveMarks || 4} / -${t.negativeMarks || 1}</span></div>
                         <button class="start-btn" onclick="startTest('${batchId}', '${subjectId}', '${chapterId}', '${t.id}')">Start</button>
                     </div>`;
             });
@@ -731,14 +815,15 @@
         }
 
         function startTest(bId, sId, cId, tId) {
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch.subjects.find(s => s.id === sId);
-            const chap = sub.chapters.find(c => c.id === cId);
-            const test = chap.tests.find(t => t.id === tId);
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = (batch?.subjects || []).find(s => s.id === sId);
+            const chap = (sub?.chapters || []).find(c => c.id === cId);
+            const test = (chap?.tests || []).find(t => t.id === tId);
+            if (!test) return;
 
             currentActiveTest = test;
             document.getElementById('active-test-title').innerText = test.name;
-            currentActiveTestQuestions = test.questions;
+            currentActiveTestQuestions = test.questions || [];
             currentQuestionIndex = 0;
             userAnswers = {};
             markedQuestions = [];
@@ -814,7 +899,7 @@
             const optContainer = document.getElementById('optionsContainer');
             optContainer.innerHTML = '';
 
-            qData.options.forEach((opt, idx) => {
+            (qData.options || []).forEach((opt, idx) => {
                 const optCard = document.createElement('div');
                 optCard.className = 'exam-option-card' + (selectedOptionIndex === idx ? ' selected' : '');
                 optCard.onclick = () => selectExamOption(idx, optCard);
@@ -979,7 +1064,7 @@
             const optContainer = document.getElementById('solOptionsContainer');
             optContainer.innerHTML = '';
 
-            qData.options.forEach((opt, idx) => {
+            (qData.options || []).forEach((opt, idx) => {
                 const optCard = document.createElement('div');
                 optCard.className = 'exam-option-card';
 
@@ -1170,7 +1255,7 @@
             smartBatchSel.innerHTML = '';
             promptBatchSel.innerHTML = '';
 
-            localData.batches.forEach(b => {
+            (localData.batches || []).forEach(b => {
                 batchSel.innerHTML += `<option value="${b.id}">${b.name}</option>`;
                 smartBatchSel.innerHTML += `<option value="${b.id}">${b.name}</option>`;
                 promptBatchSel.innerHTML += `<option value="${b.id}">${b.name}</option>`;
@@ -1185,10 +1270,14 @@
             const val = document.getElementById('newBatchInput').value.trim();
             if (!val) return;
 
+            localData.batches = localData.batches || [];
             localData.batches.push({ id: 'batch_' + Date.now(), name: val, subjects: [] });
+
             document.getElementById('newBatchInput').value = '';
             populateAdminDropdowns();
             renderAppBatches();
+
+            scheduleSaveToDb(); // ✅ realtime save
             alert(`बैच "${val}" जोड़ दिया गया!`);
         }
 
@@ -1202,21 +1291,24 @@
             const positiveMark = document.getElementById('newPositiveMarkInput').value;
             const negativeMark = document.getElementById('newNegativeMarkInput').value;
 
-            let batch = localData.batches.find(b => b.id === batchId);
+            const batch = (localData.batches || []).find(b => b.id === batchId);
             if (!batch) return;
 
-            let sub = batch.subjects.find(s => s.name.toLowerCase() === subName.toLowerCase());
+            batch.subjects = batch.subjects || [];
+            let sub = batch.subjects.find(s => (s.name || '').toLowerCase() === subName.toLowerCase());
             if (!sub) {
                 sub = { id: 'subj_' + Date.now(), name: subName, chapters: [] };
                 batch.subjects.push(sub);
             }
 
-            let chap = sub.chapters.find(c => c.name.toLowerCase() === chapName.toLowerCase());
+            sub.chapters = sub.chapters || [];
+            let chap = sub.chapters.find(c => (c.name || '').toLowerCase() === chapName.toLowerCase());
             if (!chap) {
                 chap = { id: 'chap_' + Date.now(), name: chapName, tests: [] };
                 sub.chapters.push(chap);
             }
 
+            chap.tests = chap.tests || [];
             chap.tests.push({ 
                 id: 'test_' + Date.now(), 
                 name: testName, 
@@ -1225,7 +1317,9 @@
                 negativeMarks: parseFloat(negativeMark),
                 questions: [] 
             });
+
             populateAdminDropdowns();
+            scheduleSaveToDb(); // ✅ realtime save
             alert(`टेस्ट "${testName}" [+${positiveMark} / -${negativeMark}] के साथ बना दिया गया!`);
         }
 
@@ -1235,9 +1329,9 @@
             if (!subSel) return;
             subSel.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            if (batch && batch.subjects.length > 0) {
-                batch.subjects.forEach(s => { subSel.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            if (batch && (batch.subjects || []).length > 0) {
+                (batch.subjects || []).forEach(s => { subSel.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
             }
             updateSmartChapters();
         }
@@ -1249,11 +1343,11 @@
             if (!chapSel) return;
             chapSel.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
 
-            if (sub && sub.chapters.length > 0) {
-                sub.chapters.forEach(c => { chapSel.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
+            if (sub && (sub.chapters || []).length > 0) {
+                (sub.chapters || []).forEach(c => { chapSel.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
             }
             updateSmartTests();
         }
@@ -1266,12 +1360,12 @@
             if (!testSel) return;
             testSel.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
-            const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
 
-            if (chap && chap.tests.length > 0) {
-                chap.tests.forEach(t => { testSel.innerHTML += `<option value="${t.id}">${t.name}</option>`; });
+            if (chap && (chap.tests || []).length > 0) {
+                (chap.tests || []).forEach(t => { testSel.innerHTML += `<option value="${t.id}">${t.name}</option>`; });
             }
             renderQuestionsForSelectedTest();
         }
@@ -1282,9 +1376,9 @@
             if (!subSel) return;
             subSel.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            if (batch && batch.subjects.length > 0) {
-                batch.subjects.forEach(s => { subSel.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            if (batch && (batch.subjects || []).length > 0) {
+                (batch.subjects || []).forEach(s => { subSel.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
             }
             updatePromptChapters();
         }
@@ -1296,11 +1390,11 @@
             if (!chapSel) return;
             chapSel.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
 
-            if (sub && sub.chapters.length > 0) {
-                sub.chapters.forEach(c => { chapSel.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
+            if (sub && (sub.chapters || []).length > 0) {
+                (sub.chapters || []).forEach(c => { chapSel.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
             }
             updatePromptTests();
         }
@@ -1313,12 +1407,12 @@
             if (!testSel) return;
             testSel.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
-            const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
 
-            if (chap && chap.tests.length > 0) {
-                chap.tests.forEach(t => { testSel.innerHTML += `<option value="${t.id}">${t.name}</option>`; });
+            if (chap && (chap.tests || []).length > 0) {
+                (chap.tests || []).forEach(t => { testSel.innerHTML += `<option value="${t.id}">${t.name}</option>`; });
             }
         }
 
@@ -1329,10 +1423,10 @@
             const tId = document.getElementById('promptTestSelect').value;
             const count = document.getElementById('promptQCount').value || 5;
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
-            const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
-            const test = chap ? chap.tests.find(t => t.id === tId) : null;
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
+            const test = chap ? (chap.tests || []).find(t => t.id === tId) : null;
 
             const batchName = batch ? batch.name : "NCERT Science Master Revision";
             const subName = sub ? sub.name : "SCIENCE INTEGRATED";
@@ -1404,12 +1498,16 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const ans = parseInt(document.getElementById('correctAns').value);
             const solText = document.getElementById('solutionText').value;
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch.subjects.find(s => s.id === sId);
-            const chap = sub.chapters.find(c => c.id === cId);
-            const test = chap.tests.find(t => t.id === tId);
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
+            const test = chap ? (chap.tests || []).find(t => t.id === tId) : null;
 
             const editIdx = parseInt(document.getElementById('editingQuestionIndex').value);
+
+            if (!test) return alert("Test नहीं मिला!");
+
+            test.questions = test.questions || [];
 
             if (editIdx > -1) {
                 test.questions[editIdx] = {
@@ -1431,6 +1529,8 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
 
             clearQuestionForm();
             renderQuestionsForSelectedTest();
+
+            scheduleSaveToDb(); // ✅ realtime save
         }
 
         function clearQuestionForm() {
@@ -1459,12 +1559,12 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             if (!container) return;
             container.innerHTML = '';
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch ? batch.subjects.find(s => s.id === sId) : null;
-            const chap = sub ? sub.chapters.find(c => c.id === cId) : null;
-            const test = chap ? chap.tests.find(t => t.id === tId) : null;
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
+            const test = chap ? (chap.tests || []).find(t => t.id === tId) : null;
 
-            if (!test || test.questions.length === 0) {
+            if (!test || (test.questions || []).length === 0) {
                 container.innerHTML = '<p style="font-size: 11px; color: #64748b;">कोई प्रश्न नहीं है।</p>';
                 return;
             }
@@ -1493,10 +1593,11 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const cId = document.getElementById('smartChapterSelect').value;
             const tId = document.getElementById('smartTestSelect').value;
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch.subjects.find(s => s.id === sId);
-            const chap = sub.chapters.find(c => c.id === cId);
-            const test = chap.tests.find(t => t.id === tId);
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
+            const test = chap ? (chap.tests || []).find(t => t.id === tId) : null;
+            if (!test) return;
 
             const q = test.questions[index];
             let qTitle = q.question || q.q;
@@ -1526,13 +1627,15 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const cId = document.getElementById('smartChapterSelect').value;
             const tId = document.getElementById('smartTestSelect').value;
 
-            const batch = localData.batches.find(b => b.id === bId);
-            const sub = batch.subjects.find(s => s.id === sId);
-            const chap = sub.chapters.find(c => c.id === cId);
-            const test = chap.tests.find(t => t.id === tId);
+            const batch = (localData.batches || []).find(b => b.id === bId);
+            const sub = batch ? (batch.subjects || []).find(s => s.id === sId) : null;
+            const chap = sub ? (sub.chapters || []).find(c => c.id === cId) : null;
+            const test = chap ? (chap.tests || []).find(t => t.id === tId) : null;
+            if (!test) return;
 
             test.questions.splice(index, 1);
             renderQuestionsForSelectedTest();
+            scheduleSaveToDb(); // ✅ realtime save
             alert("प्रश्न हटा दिया गया है!");
         }
 
@@ -1544,24 +1647,29 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
                 const data = JSON.parse(raw);
 
                 if (data.batch && data.questions && Array.isArray(data.questions)) {
-                    let batch = localData.batches.find(b => b.name.toLowerCase() === data.batch.toLowerCase());
+                    localData.batches = localData.batches || [];
+
+                    let batch = localData.batches.find(b => (b.name || '').toLowerCase() === data.batch.toLowerCase());
                     if (!batch) {
                         batch = { id: 'batch_' + Date.now(), name: data.batch, subjects: [] };
                         localData.batches.push(batch);
                     }
 
-                    let sub = batch.subjects.find(s => s.name.toLowerCase() === (data.subject || "सामान्य").toLowerCase());
+                    batch.subjects = batch.subjects || [];
+                    let sub = batch.subjects.find(s => (s.name || '').toLowerCase() === (data.subject || "सामान्य").toLowerCase());
                     if (!sub) {
                         sub = { id: 'subj_' + Date.now(), name: data.subject || "सामान्य", chapters: [] };
                         batch.subjects.push(sub);
                     }
 
-                    let chap = sub.chapters.find(c => c.name.toLowerCase() === (data.section || "General").toLowerCase());
+                    sub.chapters = sub.chapters || [];
+                    let chap = sub.chapters.find(c => (c.name || '').toLowerCase() === (data.section || "General").toLowerCase());
                     if (!chap) {
                         chap = { id: 'chap_' + Date.now(), name: data.section || "General", tests: [] };
                         sub.chapters.push(chap);
                     }
 
+                    chap.tests = chap.tests || [];
                     const formattedQuestions = data.questions.map(q => ({
                         question: q.q || q.question,
                         options: q.options || [],
@@ -1570,8 +1678,9 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
                         section: data.section || "General"
                     }));
 
-                    let test = chap.tests.find(t => t.name.toLowerCase() === (data.title || "New Test").toLowerCase());
+                    let test = chap.tests.find(t => (t.name || '').toLowerCase() === (data.title || "New Test").toLowerCase());
                     if (test) {
+                        test.questions = test.questions || [];
                         test.questions.push(...formattedQuestions);
                     } else {
                         chap.tests.push({
@@ -1586,6 +1695,8 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
 
                     populateAdminDropdowns();
                     renderAppBatches();
+
+                    scheduleSaveToDb(); // ✅ realtime save
                     alert(`सफलतापूर्वक ${formattedQuestions.length} प्रश्न डेटाबेस में जोड़ दिए गए हैं!`);
                     document.getElementById('importCodeInput').value = '';
                 } else {
