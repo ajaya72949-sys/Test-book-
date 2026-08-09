@@ -29,27 +29,27 @@ jobs:
         npm install -g cordova
         cordova create app com.vidyatest.app VidyaTest
         
-        # HTML और लोगो कॉपी करें
+        # HTML और PNG लोगो कॉपी करें
         if [ -f "index.html" ]; then cp index.html app/www/index.html; fi
         if [ -f "VidyaTest_logo_512x512.png" ]; then
           cp VidyaTest_logo_512x512.png app/www/VidyaTest_logo_512x512.png
           cp VidyaTest_logo_512x512.png app/www/icon.png
         fi
         
-        # Python से config.xml को अपडेट करें (आइकॉन + डिफ़ॉल्ट स्प्लैश स्क्रीन बंद)
+        # config.xml को अपडेट करें
         python3 -c '
         with open("app/config.xml", "r") as f:
             content = f.read()
         
-        # नाम बदलें
         import re
         content = re.sub(r"<name>.*?</name>", "<name>विद्याTest</name>", content)
         
-        # डिफ़ॉल्ट स्प्लैश स्क्रीन बंद करें और आइकॉन सेट करें
         extra_config = """    <icon src="www/icon.png" />
             <preference name="ShowSplashScreen" value="false" />
             <preference name="SplashScreenDelay" value="0" />
             <preference name="AutoHideSplashScreen" value="true" />
+            <preference name="FadeSplashScreen" value="false" />
+            <preference name="AndroidPostSplashScreenTheme" value="@style/Theme.AppCompat.NoActionBar" />
         """
         content = content.replace("</widget>", extra_config + "</widget>")
         
@@ -59,6 +59,21 @@ jobs:
         
         cd app
         cordova platform add android
+        
+        # Android Native Icons Overwrite (होम स्क्रीन और स्प्लैश आइकॉन दोनों को बदलने के लिए)
+        python3 -c '
+        import os, shutil
+        logo_path = "www/icon.png"
+        res_dir = "platforms/android/app/src/main/res"
+        
+        if os.path.exists(logo_path) and os.path.exists(res_dir):
+            for root, dirs, files in os.walk(res_dir):
+                for f in files:
+                    if f.startswith("ic_launcher"):
+                        target_file = os.path.join(root, f)
+                        shutil.copyfile(logo_path, target_file)
+        '
+        
         cordova build android --debug
 
     - name: Upload APK
