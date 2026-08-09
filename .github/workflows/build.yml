@@ -24,23 +24,22 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-
     - name: Build Cordova APK
       run: |
         npm install -g cordova
+        # टेक्निकल नाम English में (ताकि एरर न आए)
         cordova create app com.vidyatest.app VidyaTest
         
-        # Copy HTML & Images
-        cp index.html app/www/index.html
-        
+        # HTML और इमेज कॉपी करें
+        if [ -f "index.html" ]; then cp index.html app/www/index.html; fi
         if [ -f "VidyaTest_logo_512x512.png" ]; then
-          cp VidyaTest_logo_512x512.png app/www/VidyaTest_logo_512x512.png
           cp VidyaTest_logo_512x512.png app/www/icon.png
         fi
         
         cd app
+        # यहाँ ऐप का डिस्प्ले नाम 'विद्याTest' सेट किया जा रहा है
+        sed -i 's/<name>.*<\/name>/<name>विद्याTest<\/name>/g' config.xml
+        
         cordova platform add android
         cordova build android --debug
 
