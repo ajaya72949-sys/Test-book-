@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Web App</title>
+</head>
+<body>
+
+  <h2>डेटा परमानेंटली सेव करें</h2>
+  <input type="text" id="userInput" placeholder="यहाँ कुछ लिखें...">
+  <button onclick="saveData(document.getElementById('userInput').value)">Save</button>
+
+  <!-- Firebase JavaScript SDK Modules -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpuckLW-QqbLidK99R-LjN",
+      authDomain: "testbook-123.firebaseapp.com",
+      projectId: "testbook-123",
+      storageBucket: "testbook-123.firebasestorage.app",
+      messagingSenderId: "404654379054",
+      appId: "1:404654379054:web:d7a3482958061c248c",
+      measurementId: "G-QH85GK4MXX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function saveData(textInput) {
+      if (!textInput.trim()) {
+        alert("कृपया कुछ लिखें!");
+        return;
+      }
+      try {
+        const docRef = await addDoc(collection(db, "user_content"), {
+          text: textInput,
+          createdAt: new Date()
+        });
+        alert("डेटा सफलतापूर्वक Firebase में परमानेंट सेव हो गया!");
+      } catch (e) {
+        console.error("Error: ", e);
+        alert("Error: " + e.message);
+      }
+    }
+
+    window.saveData = saveData;
+  </script>
+</body>
+</html>
