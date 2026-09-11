@@ -60,6 +60,9 @@ jobs:
         cd app
         cordova platform add android
         
+        # यहाँ Text-to-Speech (TTS) प्लगिन जोड़ा गया है ताकि यह समस्या हमेशा के लिए खत्म हो जाए
+        cordova plugin add cordova-plugin-tts
+        
         # Android Native Icons Overwrite (होम स्क्रीन और स्प्लैश आइकॉन दोनों को बदलने के लिए)
         python3 -c '
         import os, shutil
