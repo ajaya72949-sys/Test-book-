@@ -162,7 +162,7 @@
         .direct-jump-strip { display: flex; gap: 6px; overflow-x: auto; flex: 1; padding: 2px 0; scrollbar-width: none; }
         .direct-jump-strip::-webkit-scrollbar { display: none; }
         .strip-btn { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .strip-btn.active { outline: 2px solid #4f46e5; }
+        .strip-btn.active { background: #eef2ff !important; color: #4338ca !important; border-color: #6366f1 !important; outline: 2px solid #4f46e5; outline-offset: 1px; box-shadow: 0 0 0 4px rgba(79,70,229,.18), 0 0 12px rgba(99,102,241,.55); transform: none !important; z-index: 2; }
         
         .strip-btn.sol-correct { background: #22c55e; color: white; border-color: #22c55e; }
         .strip-btn.sol-incorrect { background: #ef4444; color: white; border-color: #ef4444; }
@@ -602,6 +602,9 @@
                                 <option value="obc">OBC</option>
                                 <option value="sc">SC</option>
                                 <option value="st">ST</option>
+                                <option value="transgender">Transgender</option>
+                                <option value="ebc">EBC</option>
+                                <option value="other">अन्य (Other)</option>
                             </select>
                         </div>
                         <div id="cutoffResult" class="cutoff-result">Category चुनें</div>
@@ -2077,9 +2080,10 @@ function renderChapters(batchId, subjectId) {
             currentActiveTestQuestions.forEach((_, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'strip-btn';
-                if (idx === currentQuestionIndex) btn.classList.add('active');
                 if (userAnswers[idx] !== undefined) btn.style.background = '#22c55e', btn.style.color = 'white';
                 if (markedQuestions.includes(idx)) btn.style.background = '#eab308', btn.style.color = 'white';
+                // Current question हमेशा active रहे, चाहे answered या marked हो।
+                if (idx === currentQuestionIndex) btn.classList.add('active');
 
                 btn.innerText = idx + 1;
                 btn.onclick = () => {
@@ -2087,6 +2091,14 @@ function renderChapters(batchId, subjectId) {
                     renderExamQuestion();
                 };
                 container.appendChild(btn);
+
+                if (idx === currentQuestionIndex) {
+                    requestAnimationFrame(() => btn.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'center'
+                    }));
+                }
             });
         }
 
@@ -2227,7 +2239,15 @@ function renderChapters(batchId, subjectId) {
             const category = document.getElementById('cutoffCategory')?.value || 'general';
             if (!result || !currentActiveTest) return;
 
-            const cutoffRanges = { general: [70, 70], obc: [65, 65], sc: [60, 60], st: [60, 60] };
+            const cutoffRanges = {
+                general: [70, 70],
+                obc: [65, 65],
+                sc: [60, 60],
+                st: [60, 60],
+                transgender: [60, 60],
+                ebc: [65, 65],
+                other: [60, 60]
+            };
             const [cutoff] = cutoffRanges[category] || cutoffRanges.general;
             const total = currentActiveTestQuestions.length || 1;
             const answered = Object.keys(userAnswers).length;
@@ -2549,7 +2569,7 @@ function renderChapters(batchId, subjectId) {
             }
             const win = window.open('', '_blank');
             if (!win) return alert('कृपया popup अनुमति दें।');
-            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.7;color:#111827;white-space:pre-wrap}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}</style></head><body><h1>' + escapeHtml(note.title) + '</h1>' + escapeHtml(note.text || note.url || '') + '</body></html>');
+            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.7;color:#111827;white-space:pre-wrap}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}.back-btn{border:0;border-radius:8px;background:#4f46e5;color:#fff;padding:10px 16px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:18px}</style></head><body><button class="back-btn" onclick="window.close();">← Back</button><h1>' + escapeHtml(note.title) + '</h1>' + escapeHtml(note.text || note.url || '') + '</body></html>');
             win.document.close();
         }
 
@@ -3364,6 +3384,8 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
         }
 
         function stopNoteSpeech() {
+            if (typeof stopAndroidTts === 'function') stopAndroidTts();
+            window.__nativeTtsSpeaking = false;
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             noteSpeechUtterance = null;
             noteSpeechChunks = [];
@@ -3485,7 +3507,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             if (!note) return;
             const win = window.open('', '_blank');
             if (!win) return alert('कृपया browser में popup अनुमति दें।');
-            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:25px;line-height:1.7;color:#111827}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}.content{white-space:pre-wrap}</style></head><body><h1>' + escapeHtml(note.title) + '</h1><div class="content">' + escapeHtml(note.text || '') + '</div></body></html>');
+            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:25px;line-height:1.7;color:#111827}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}.content{white-space:pre-wrap}.back-btn{border:0;border-radius:8px;background:#4f46e5;color:#fff;padding:10px 16px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:18px}</style></head><body><button class="back-btn" onclick="window.close();">← Back</button><h1>' + escapeHtml(note.title) + '</h1><div class="content">' + escapeHtml(note.text || '') + '</div></body></html>');
             win.document.close();
         }
 
@@ -3534,23 +3556,73 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
         // Admin panel से activate किया गया access ही student को उपलब्ध होगा।
     </script>
     <script>
-        // अंतिम speech handler: पूरे वाक्य को एक utterance में बोलता है।
+        // अंतिम speech handler: WebView में native Android TTS bridge हो तो उसे प्राथमिकता दें।
         // अक्षर केवल स्क्रीन पर highlight होते हैं, इसलिए “कोशिका” नहीं टूटती।
+        function getAndroidTtsBridge() {
+            // APK/WebView wrapper इनमें से किसी एक नाम से bridge expose कर सकता है।
+            return window.AndroidTTS || window.Android || window.androidTTS || null;
+        }
+
+        function speakWithAndroidBridge(text) {
+            const bridge = getAndroidTtsBridge();
+            if (!bridge) return false;
+
+            try {
+                if (typeof bridge.speakText === 'function') bridge.speakText(text);
+                else if (typeof bridge.speak === 'function') bridge.speak(text);
+                else if (typeof bridge.textToSpeech === 'function') bridge.textToSpeech(text);
+                else return false;
+
+                const button = document.getElementById('speakNoteButton');
+                if (button) button.innerHTML = '<i class="fa-solid fa-stop"></i> रोकें';
+                return true;
+            } catch (error) {
+                console.warn('Native Android TTS bridge failed:', error);
+                return false;
+            }
+        }
+
+        function stopAndroidTts() {
+            const bridge = getAndroidTtsBridge();
+            try {
+                if (bridge && typeof bridge.stopSpeaking === 'function') bridge.stopSpeaking();
+                else if (bridge && typeof bridge.stop === 'function') bridge.stop();
+            } catch (error) {
+                console.warn('Native Android TTS stop failed:', error);
+            }
+        }
+
         function toggleNoteSpeech(noteId) {
-            if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
-                alert('इस browser/device में Text-to-Speech उपलब्ध नहीं है।');
+            const note = getNotes().find(item => String(item.id) === String(noteId));
+            const text = note ? String(note.text || '').trim() : '';
+            if (!text) {
+                alert('इस Note में पढ़ने के लिए टेक्स्ट नहीं है।');
+                return;
+            }
+
+            const nativeBridge = getAndroidTtsBridge();
+            const browserTtsAvailable = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+
+            if (nativeBridge && (typeof nativeBridge.speakText === 'function' || typeof nativeBridge.speak === 'function' || typeof nativeBridge.textToSpeech === 'function')) {
+                if (window.__nativeTtsSpeaking) {
+                    stopAndroidTts();
+                    window.__nativeTtsSpeaking = false;
+                    stopNoteSpeech();
+                    return;
+                }
+                if (speakWithAndroidBridge(text)) {
+                    window.__nativeTtsSpeaking = true;
+                    return;
+                }
+            }
+
+            if (!browserTtsAvailable) {
+                alert('इस APK के WebView में Text-to-Speech उपलब्ध नहीं है। APK में Android TextToSpeech bridge जोड़ना आवश्यक है।');
                 return;
             }
 
             if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
                 stopNoteSpeech();
-                return;
-            }
-
-            const note = getNotes().find(item => String(item.id) === String(noteId));
-            const text = note ? String(note.text || '').trim() : '';
-            if (!text) {
-                alert('इस Note में पढ़ने के लिए टेक्स्ट नहीं है।');
                 return;
             }
 
@@ -3565,6 +3637,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
             const voices = window.speechSynthesis.getVoices();
             noteSpeechVoice = voices.find(voice => /^hi-IN$/i.test(voice.lang))
                 || voices.find(voice => /^hi(-|_)/i.test(voice.lang))
+                || voices[0]
                 || null;
 
             const button = document.getElementById('speakNoteButton');
