@@ -74,7 +74,20 @@
         .app-header-compact { background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; padding: 15px; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; }
         .app-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .user-profile { display: flex; align-items: center; gap: 8px; }
-        .avatar { width: 32px; height: 32px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--primary); }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary); cursor: pointer; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-modal { display:none; position:fixed; inset:0; z-index:5000; background:rgba(15,23,42,.62); align-items:center; justify-content:center; padding:18px; }
+        .profile-modal.active { display:flex; }
+        .profile-card { width:100%; max-width:360px; background:#fff; border-radius:16px; padding:18px; box-shadow:0 12px 30px rgba(15,23,42,.25); }
+        .profile-card h3 { font-size:16px; color:#1e293b; margin-bottom:12px; }
+        .profile-name-input { width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; margin-bottom:12px; outline:none; }
+        .avatar-options { display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; margin-bottom:14px; }
+        .avatar-option { border:2px solid #e2e8f0; background:#f8fafc; border-radius:10px; padding:7px; font-size:25px; cursor:pointer; text-align:center; }
+        .avatar-option.selected { border-color:#4f46e5; background:#eef2ff; }
+        .profile-actions { display:flex; gap:8px; }
+        .profile-actions button { flex:1; border:0; border-radius:8px; padding:10px; font-weight:700; cursor:pointer; }
+        .profile-save { background:#4f46e5; color:#fff; }
+        .profile-close { background:#f1f5f9; color:#334155; }
         .greeting h4 { font-size: 14px; font-weight: 600; }
         .greeting p { font-size: 10px; opacity: 0.8; }
         .coin-badge { background: rgba(255, 255, 255, 0.2); padding: 4px 10px; border-radius: 15px; font-size: 11px; font-weight: 600; }
@@ -88,6 +101,32 @@
         .section-title h3 { font-size: 15px; font-weight: 700; color: #1e293b; margin: 12px 0; }
 
         .banner { background: linear-gradient(135deg, #ff7e5f, #feb47b); color: white; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .banner-slider { position: relative; overflow: hidden; border-radius: 12px; min-height: 145px; background: #e2e8f0; }
+        .banner-track { display: flex; transition: transform .55s ease; height: 145px; }
+        .banner-slide { min-width: 100%; position: relative; overflow: hidden; color: #fff; }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .banner-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,23,42,.82), rgba(15,23,42,.12)); }
+        .banner-slide-content { position: absolute; inset: 0; z-index: 1; padding: 18px; display: flex; flex-direction: column; justify-content: center; }
+        .banner-slide-content { pointer-events: none; opacity: 0; }
+        .banner-slide-content h4 { font-size: 17px; margin-bottom: 5px; }
+        .banner-slide-content p { font-size: 11px; margin-bottom: 9px; }
+        .social-strip { display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; margin-top: 10px; padding: 7px 10px; border-radius: 9px; background: #eef2ff; color: #4338ca; font-size: 11px; }
+        .social-track { display: inline-flex; gap: 28px; animation: socialScroll 14s linear infinite; }
+        .social-track a { color: #4338ca; text-decoration: none; font-weight: 700; display:inline-flex; align-items:center; gap:5px; }
+        .social-track a.youtube { color:#dc2626; }
+        .social-track a.instagram { color:#c026d3; }
+        .social-track a.whatsapp { color:#16a34a; }
+        .admin-promotion-list { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+        .admin-promotion-item { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px; border:1px solid #e2e8f0; border-radius:8px; background:#f8fafc; font-size:11px; }
+        .admin-promotion-item img { width:42px; height:28px; object-fit:cover; border-radius:5px; }
+        @keyframes socialScroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        .tests-search { margin-bottom: 12px; }
+        .batch-search-panel { margin: 0 0 14px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 14px; background: linear-gradient(135deg, #f8fafc, #eef2ff); box-shadow: 0 4px 12px rgba(15,23,42,.06); }
+        .batch-search-panel label { display: block; margin-bottom: 7px; color: #334155; font-size: 12px; font-weight: 800; }
+        .batch-search-input { width: 100%; padding: 11px 13px 11px 38px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none; background: #fff; color: #1e293b; font-size: 13px; transition: border-color .2s, box-shadow .2s; }
+        .batch-search-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.14); }
+        .batch-search-wrap { position: relative; }
+        .batch-search-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #6366f1; font-size: 13px; }
         .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .category-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; }
         .cat-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px auto; color: white; }
@@ -97,6 +136,14 @@
 
         .app-screen { display: none; }
         .app-screen.active { display: block; }
+
+        /* Tests tab: show only the batch catalogue, without home promotions. */
+        #app-view.tests-only #home-header-wrapper,
+        #app-view.tests-only #homeBannerSlider,
+        #app-view.tests-only #socialLinkStrip,
+        #app-view.tests-only #screen-home > .section-title { display: none !important; }
+        #app-view.tests-only #screen-home { padding-top: 4px; }
+        #app-view.tests-only #batchContainer { margin-top: 0; }
 
         /* EXAM & SOLUTION COMMON STYLES */
         #screen-exam, #screen-solution { background-color: var(--exam-bg); color: var(--exam-text); min-height: calc(100vh - 40px); position: absolute; top: 0; left: 0; width: 100%; z-index: 2000; display: none; flex-direction: column; }
@@ -171,16 +218,91 @@
 
         .analysis-section { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
         .analysis-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .cutoff-panel { background: linear-gradient(135deg, #eff6ff, #eef2ff); border: 1px solid #c7d2fe; border-radius: 10px; padding: 12px; margin-bottom: 15px; }
+        .cutoff-controls { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+        .cutoff-controls label { font-size: 12px; font-weight: 700; color: #334155; flex: 1; }
+        .cutoff-controls select { padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 7px; background: #fff; font-size: 12px; font-weight: 600; }
+        .cutoff-result { font-size: 13px; font-weight: 700; color: #475569; }
+        .cutoff-result.clear { color: #15803d; }
+        .cutoff-result.not-clear { color: #b91c1c; }
+        .cutoff-celebration { display: none; position: fixed; inset: 0; z-index: 2500; font-size: 58px; pointer-events: none; overflow: hidden; justify-content: center; align-items: flex-start; }
+        .cutoff-celebration.show { display: flex; }
+        .cutoff-celebration .celebration-item { position: absolute; top: 45%; animation: cutoffFly 2.8s ease-out forwards; }
+        .cutoff-celebration .celebration-item:nth-child(1) { left: 8%; animation-delay: 0s; }
+        .cutoff-celebration .celebration-item:nth-child(2) { left: 25%; animation-delay: .15s; }
+        .cutoff-celebration .celebration-item:nth-child(3) { left: 43%; animation-delay: .3s; }
+        .cutoff-celebration .celebration-item:nth-child(4) { left: 61%; animation-delay: .45s; }
+        .cutoff-celebration .celebration-item:nth-child(5) { left: 78%; animation-delay: .6s; }
+        .cutoff-celebration .celebration-item:nth-child(6) { left: 90%; animation-delay: .75s; }
+        .cutoff-celebration .celebration-item:nth-child(7) { left: 15%; animation-delay: .9s; }
+        .cutoff-celebration .celebration-item:nth-child(8) { left: 34%; animation-delay: 1.05s; }
+        .cutoff-celebration .celebration-item:nth-child(9) { left: 52%; animation-delay: 1.2s; }
+        .cutoff-celebration .celebration-item:nth-child(10) { left: 70%; animation-delay: 1.35s; }
+        .cutoff-celebration .celebration-item:nth-child(11) { left: 84%; animation-delay: 1.5s; }
+        .cutoff-celebration .celebration-item:nth-child(12) { left: 96%; animation-delay: 1.65s; }
+        .cutoff-celebration .celebration-item:nth-child(13) { left: 5%; animation-delay: .3s; }
+        .cutoff-celebration .celebration-item:nth-child(14) { left: 45%; animation-delay: .55s; }
+        .cutoff-celebration .celebration-item:nth-child(15) { left: 65%; animation-delay: .8s; }
+        .cutoff-celebration .celebration-item:nth-child(16) { left: 25%; animation-delay: 1.4s; }
+        .cutoff-celebration .celebration-item:nth-child(17) { left: 76%; animation-delay: 1.7s; }
+        @keyframes cutoffFly { 0% { opacity: 0; transform: translate(-50%, 110px) scale(.2) rotate(-35deg); } 18% { opacity: 1; transform: translate(-50%, 0) scale(1.35) rotate(18deg); } 55% { opacity: 1; transform: translate(-50%, -42vh) scale(1.05) rotate(180deg); } 100% { opacity: 0; transform: translate(-50%, -105vh) scale(.7) rotate(360deg); } }
         .badge-strong { background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 11px; }
         .badge-weak { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 11px; }
 
         .solution-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 15px; font-size: 12px; line-height: 1.5; display: none; }
         .solution-box.show { display: block; }
 
-        .app-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; background: white; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
-        .nav-item { text-align: center; color: #94a3b8; font-size: 10px; text-decoration: none; cursor: pointer; }
-        .nav-item i { font-size: 16px; display: block; margin-bottom: 2px; }
-        .nav-item.active { color: var(--primary); font-weight: 700; }
+        .mobile-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 600px; z-index: 1000; display: grid; grid-template-columns: repeat(5, 1fr); background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-top: 1px solid #e2e8f0; padding: 8px 4px; box-shadow: 0 -4px 16px rgba(15,23,42,0.08); text-align: center; }
+        .notes-empty { text-align: center; color: #64748b; font-size: 12px; padding: 30px 10px; }
+        .note-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .note-card h4 { font-size: 18px; color: #1e293b; margin-bottom: 6px; }
+        .note-card p { font-size: 15px; color: #475569; margin-bottom: 12px; line-height: 1.6; }
+        .note-subject-heading { font-size: 20px; color: #4338ca; margin: 18px 0 10px; font-weight: 800; }
+        .note-chapter-heading { font-size: 17px; color: #1e293b; margin-bottom: 8px; font-weight: 700; }
+        .note-content { font-size: 17px; line-height: 1.85; color: #1e293b; white-space: pre-wrap; margin: 12px 0 16px; }
+        .note-card h4 { font-size: 18px; color: #4338ca; margin: 6px 0; }
+        .note-paid-badge { color: #b45309; background: #fef3c7; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+        .note-card .note-action-btn { font-size: 14px; padding: 11px 8px; }
+        .note-actions { display: flex; gap: 8px; }
+        .note-action-btn { flex: 1; border: none; border-radius: 8px; padding: 9px 6px; color: #fff; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; }
+        .note-read-btn { background: linear-gradient(135deg, #ff416c, #ff4b2b); box-shadow: 0 4px 10px rgba(255,65,108,0.25); }
+        .note-download-btn { background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 4px 10px rgba(37,99,235,0.25); }
+        .notes-navigation-card { background: linear-gradient(135deg, #eef2ff, #fff1f2); border: 1px solid #c7d2fe; border-radius: 14px; padding: 18px; margin-bottom: 12px; cursor: pointer; box-shadow: 0 5px 14px rgba(79,70,229,0.10); }
+        .notes-navigation-card h3 { color: #3730a3; font-size: 20px; margin-bottom: 5px; }
+        .notes-navigation-card p { color: #64748b; font-size: 14px; }
+        .notes-reader { background: #fffdf7; border: 1px solid #eadcc8; border-radius: 14px; padding: 24px 20px 30px; box-shadow: 0 5px 16px rgba(15,23,42,0.08); }
+        .notes-reader-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+        .notes-reader h2 { color: #4338ca; font-size: 25px; line-height: 1.35; margin: 0; text-align: left; flex: 1; }
+        .notes-reader-speaker-btn { border: none; border-radius: 10px; padding: 10px 12px; color: #fff; background: linear-gradient(135deg, #0f766e, #2563eb); font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 10px rgba(37,99,235,0.22); }
+        .notes-reader .reader-content { color: #1e293b; font-family: Georgia, 'Noto Serif Devanagari', serif; font-size: 19px; line-height: 2; white-space: pre-wrap; overflow-wrap: anywhere; text-align: left; margin: 20px 0 24px; scroll-behavior: smooth; max-height: 58vh; overflow-y: auto; padding: 8px 6px; }
+        .notes-reader .speech-chunk { border-radius: 6px; transition: background-color 0.2s ease, color 0.2s ease; scroll-margin-top: 35vh; }
+        .notes-reader .speech-chunk.speaking { background: linear-gradient(90deg, #fef08a, #fde68a); color: #7c2d12; box-shadow: 0 2px 8px rgba(245,158,11,0.22); padding: 2px 4px; }
+        .notes-reader .speech-char { border-radius: 4px; transition: background-color .12s ease, color .12s ease; scroll-margin-top: 42vh; }
+        .notes-reader .speech-char.speaking { background: #facc15; color: #7c2d12; box-shadow: 0 1px 5px rgba(234,179,8,.35); }
+        .notes-reader .speech-word { border-radius: 5px; transition: background-color .12s ease, color .12s ease; scroll-margin-top: 42vh; }
+        .notes-reader .speech-word.speaking { background: #facc15; color: #7c2d12; box-shadow: 0 1px 5px rgba(234,179,8,.35); }
+        .notes-reader .reader-content { overflow-anchor: none; }
+        .notes-reader-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .notes-reader-actions > button { flex: 1 1 140px; }
+        .notes-read-option { display: block; width: 100%; border: none; border-radius: 10px; padding: 13px; color: #fff; background: linear-gradient(135deg, #f43f5e, #ec4899, #8b5cf6); font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 12px rgba(236,72,153,0.25); }
+        .notes-speak-option { display: block; width: 100%; border: none; border-radius: 10px; padding: 13px; color: #fff; background: linear-gradient(135deg, #0ea5e9, #2563eb, #4f46e5); font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 12px rgba(37,99,235,0.25); }
+        .test-notes-btn { background: linear-gradient(135deg, #f43f5e, #ec4899); color: #fff; border: none; padding: 7px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .test-notes-btn i { margin-right: 4px; }
+        .mobile-nav-tab { display: flex; flex-direction: column; align-items: center; gap: 2px; border: none; background: transparent; color: #64748b; font-size: 10px; font-weight: 600; cursor: pointer; }
+        .mobile-nav-tab i { font-size: 16px; }
+        .mobile-nav-tab.active { color: var(--primary); }
+        .saved-question-btn { margin: 0 0 14px; width: 100%; padding: 9px 12px; border: 1px solid #c7d2fe; border-radius: 8px; background: #eef2ff; color: #4338ca; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .saved-question-btn.saved { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
+        .saved-meta { display: block; margin-top: 6px; color: #64748b; font-size: 10px; }
+        .saved-header-btn { width: 28px; height: 28px; border: 1px solid #cbd5e1; border-radius: 50%; background: #f8fafc; color: #4338ca; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
+        .saved-header-btn:hover { transform: scale(1.06); }
+        .saved-header-btn.saved { background: #facc15; border-color: #eab308; color: #78350f; box-shadow: 0 0 0 3px rgba(250, 204, 21, .22); }
+        .saved-header-btn.saved i { color: #78350f; }
+        .saved-question-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 13px; margin-bottom: 12px; }
+        .saved-question-card .saved-question-title { font-size: 13px; font-weight: 700; line-height: 1.5; color: #0f172a; margin-bottom: 10px; }
+        .saved-option { padding: 9px 10px; border: 1px solid #e2e8f0; border-radius: 7px; margin-top: 7px; font-size: 12px; color: #334155; }
+        .saved-option.saved-correct { border-color: #22c55e; background: #f0fdf4; color: #15803d; font-weight: 700; }
+        .saved-option.saved-selected { border-color: #2563eb; background: #eff6ff; color: #1e40af; }
 
         /* ADMIN PANEL STYLING */
         .admin-main { padding: 15px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 60px; }
@@ -317,6 +439,17 @@
 </head>
 <body>
 
+    <div id="cutoffCelebration" class="cutoff-celebration" aria-hidden="true"><span class="celebration-item">🎉</span><span class="celebration-item">🎊</span><span class="celebration-item">🚀</span><span class="celebration-item">✨</span><span class="celebration-item">🏆</span><span class="celebration-item">🎉</span><span class="celebration-item">🎈</span><span class="celebration-item">💥</span><span class="celebration-item">🌟</span><span class="celebration-item">🥳</span><span class="celebration-item">🏅</span><span class="celebration-item">🎁</span><span class="celebration-item">💫</span><span class="celebration-item">🎆</span><span class="celebration-item">👏</span><span class="celebration-item">🔥</span><span class="celebration-item">💯</span></div>
+
+    <div id="profileModal" class="profile-modal" onclick="if(event.target===this) closeProfileEditor()">
+        <div class="profile-card">
+            <h3>अपना Profile बनाएं</h3>
+            <input id="studentNameInput" class="profile-name-input" placeholder="अपना नाम लिखें">
+            <div class="avatar-options" id="avatarOptions"></div>
+            <div class="profile-actions"><button class="profile-close" onclick="closeProfileEditor()">Close</button><button class="profile-save" onclick="saveStudentProfile()">Save Profile</button></div>
+        </div>
+    </div>
+
     <div id="splashScreen">
     <div class="splash-center">
         <div class="splash-logo-box">
@@ -347,30 +480,27 @@
             <div id="home-header-wrapper" class="app-header-compact">
                 <div class="app-header-top">
                     <div class="user-profile">
-                        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                        <div class="avatar" id="studentAvatar" onclick="openProfileEditor()" title="Edit profile"><i class="fa-solid fa-user"></i></div>
                         <div class="greeting">
-                            <h4>नमस्ते, विद्याTest 👋</h4>
-                            <p>Aspirant</p>
+                            <h4 id="studentGreeting">नमस्ते, विद्याTest 👋</h4>
+                            <p id="studentRole">Aspirant</p>
                         </div>
                     </div>
                     <div class="coin-badge"><i class="fa-solid fa-coins" style="color: #fbbf24;"></i> 450 Pts</div>
-                </div>
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="अपना एग्जाम या टेस्ट खोजें...">
                 </div>
             </div>
 
             <div class="app-body">
                 <div id="screen-home" class="app-screen active">
-                    <div class="banner">
-                        <div>
-                            <h4>BSSC CGL Mock Test</h4>
-                            <p>Full Practice Sets Available</p>
-                            <button style="background: white; color: #ff7e5f; border:none; padding:4px 10px; border-radius:8px; font-weight:bold; font-size:11px; cursor:pointer;" onclick="openBatchSyllabus('batch_bssc_cgl')">Start Test</button>
+                    <div id="batchSearchPanel" class="batch-search-panel" style="display:none;">
+                        <label for="batchSearchInput"><i class="fa-solid fa-layer-group"></i> Batch खोजें</label>
+                        <div class="batch-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="batchSearchInput" class="batch-search-input" type="search" placeholder="Batch का नाम लिखें..." oninput="filterBatchList(this.value)">
                         </div>
-                        <i class="fa-solid fa-trophy" style="font-size: 35px; opacity: 0.8;"></i>
                     </div>
+                    <div id="homeBannerSlider" class="banner-slider"></div>
+                    <div id="socialLinkStrip" class="social-strip"></div>
                     <div class="section-title"><h3>उपलब्ध बैच (Batches)</h3></div>
                     <div class="category-grid" id="batchContainer"></div>
                 </div>
@@ -394,23 +524,39 @@
 
                 <div id="screen-test-list" class="app-screen">
                     <div class="nav-back-header">
-                        <button class="nav-back-btn" onclick="showScreen('screen-chapter')"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button class="nav-back-btn" onclick="showScreen('screen-home')"><i class="fa-solid fa-arrow-left"></i></button>
                         <h3 id="selected-chapter-title" style="font-size:14px;">Tests</h3>
                     </div>
+                    <div class="search-box tests-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="allTestsSearch" type="search" placeholder="टेस्ट खोजें..." oninput="filterAllTests(this.value)">
+                    </div>
                     <div id="test-list-container"></div>
+                </div>
+
+                <div id="screen-notes" class="app-screen">
+                    <div class="nav-back-header">
+                        <button class="nav-back-btn" onclick="showScreen('screen-home')"><i class="fa-solid fa-arrow-left"></i></button>
+                        <h3 style="font-size:14px;">PDF Notes</h3>
+                    </div>
+                    <div id="studentNotesContainer"></div>
                 </div>
 
                 <!-- EXAM SCREEN -->
                 <div id="screen-exam" class="app-screen">
                     <div class="exam-top-bar">
                         <div class="exam-top-left">
-                            <button class="pause-btn" onclick="openPauseModal()"><i class="fa-solid fa-pause"></i></button>
+                            <button class="pause-btn" onclick="openPauseModal()" title="Pause Test"><i class="fa-solid fa-pause"></i></button>
+                            <button class="pause-btn" onclick="leaveTestForNow()" title="Back to Tests"><i class="fa-solid fa-arrow-left"></i></button>
                             <div>
                                 <span class="timer-val" id="testMainTimer">02:14:49</span><br>
                                 <span class="test-name-subtitle" id="active-test-title">BSSC CGL Mock</span>
                             </div>
                         </div>
-                        <div><i class="fa-solid fa-bars" style="cursor:pointer;" onclick="toggleQuestionPalette('exam')"></i></div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <button type="button" class="saved-header-btn" title="Save Question" aria-label="Save Question" onclick="saveQuestionFromHeader()"><i class="fa-solid fa-bookmark"></i></button>
+                            <i class="fa-solid fa-bars" style="cursor:pointer;" onclick="toggleQuestionPalette('exam')"></i>
+                        </div>
                     </div>
 
                     <div class="exam-sub-bar">
@@ -434,6 +580,7 @@
                     <div class="exam-bottom-actions">
                         <button class="btn-exam-action btn-mark" onclick="markAndNext()">Mark & Next</button>
                         <button class="btn-exam-action" onclick="clearOption()">Clear</button>
+                        <button class="btn-exam-action" onclick="previewPreviousQuestion()"><i class="fa-solid fa-chevron-left"></i> Preview</button>
                         <button class="btn-exam-action btn-save-next" onclick="saveAndNext()">Save & Next</button>
                     </div>
                 </div>
@@ -441,9 +588,23 @@
                 <!-- SCORE BOARD -->
                 <div id="screen-result" class="app-screen">
                     <div class="result-header-card">
-                        <h4 id="resTestTitle">BSSC CGL पूर्ण परीक्षा</h4>
+                        <h4 id="resTestTitle">Test Result</h4>
                         <div class="result-score-big" id="resTotalMarks">0 / 0</div>
                         <p style="font-size:12px; opacity:0.9;" id="resGradeBadge">Performance: Excellent</p>
+                    </div>
+
+                    <div class="cutoff-panel">
+                        <strong style="font-size:13px;color:#1e293b;"><i class="fa-solid fa-filter" style="color:#4f46e5;"></i> Category Cutoff Analysis</strong>
+                        <div class="cutoff-controls">
+                            <label for="cutoffCategory">अपनी Category चुनें</label>
+                            <select id="cutoffCategory" onchange="updateCutoffAnalysis()">
+                                <option value="general">General</option>
+                                <option value="obc">OBC</option>
+                                <option value="sc">SC</option>
+                                <option value="st">ST</option>
+                            </select>
+                        </div>
+                        <div id="cutoffResult" class="cutoff-result">Category चुनें</div>
                     </div>
 
                     <div class="stats-grid">
@@ -472,7 +633,8 @@
 
                     <div style="display:flex; gap:10px; margin-top:10px; margin-bottom:20px;">
                         <button class="btn-blue" onclick="openSolutionView()"><i class="fa-solid fa-eye"></i> View Solutions</button>
-                        <button class="btn-purple" onclick="showScreen('screen-home')"><i class="fa-solid fa-house"></i> Go Home</button>
+                        <button class="btn-purple" onclick="reattemptCurrentTest()"><i class="fa-solid fa-rotate-right"></i> Re-attempt</button>
+                        <button class="btn-purple" onclick="goBackFromResult()"><i class="fa-solid fa-arrow-left"></i> Back</button>
                     </div>
                 </div>
 
@@ -483,7 +645,10 @@
                             <button class="pause-btn" onclick="showScreen('screen-result')"><i class="fa-solid fa-arrow-left"></i></button>
                             <h3 style="font-size:15px; font-weight:700;">Detailed Solutions</h3>
                         </div>
-                        <div><i class="fa-solid fa-bars" style="cursor:pointer; font-size:18px; color:#ef4444;" onclick="toggleQuestionPalette('solution')"></i></div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <button type="button" class="saved-header-btn" title="Save Question" aria-label="Save Question" onclick="saveQuestionFromHeader()"><i class="fa-solid fa-bookmark"></i></button>
+                            <i class="fa-solid fa-bars" style="cursor:pointer; font-size:18px; color:#ef4444;" onclick="toggleQuestionPalette('solution')"></i>
+                        </div>
                     </div>
 
                     <div class="exam-sub-bar">
@@ -549,12 +714,50 @@
     <p style="margin:0 0 10px 0; color:#64748b; font-size:12px;">WhatsApp पर आई हुई Subject ID को यहाँ डालकर Unlock बटन दबाएँ:</p>
     
     <div style="display:flex; gap:8px;">
+        <input type="text" id="adminStudentIdInput" placeholder="Student ID" style="width:130px; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; outline:none">
         <input type="text" id="adminSubIdInput" placeholder="Subject ID (जैसे: subj_1786277462010)" style="flex:1; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; outline:none;">
+        <select id="adminAccessDuration" style="padding:10px 8px; border:1px solid #cbd5e1; border-radius:8px; font-size:12px; background:#fff;">
+            <option value="6months">6 महीने</option>
+            <option value="1year">1 साल</option>
+            <option value="lifetime">Lifetime</option>
+        </select>
         <button type="button" onclick="grantAccessFromAdmin()" style="background:#2563eb; color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:bold; font-size:13px; cursor:pointer;">
-            Unlock Direct
+            Activate Access
         </button>
     </div>
+    <div id="adminPurchaseRequests" style="margin-top:14px;"></div>
 </div>
+
+                <!-- STUDENT ACTIVITY -->
+                <div class="admin-card">
+                    <h3>📊 Student Activity</h3>
+                    <div style="display:flex;gap:10px;">
+                        <div class="stat-card" style="flex:1;"><h5>REGISTERED STUDENTS</h5><div class="val" id="adminStudentCount">0</div></div>
+                        <div class="stat-card" style="flex:1;"><h5>TEST ATTEMPTS</h5><div class="val" id="adminAttemptCount">0</div></div>
+                    </div>
+                    <p style="font-size:10px;color:#64748b;margin-top:8px;">यह count इस ऐप में बने unique student/device IDs और दर्ज test attempts का है।</p>
+                </div>
+
+                <!-- HOME BANNER & SOCIAL SETTINGS -->
+                <div class="admin-card">
+                    <h3>0. Multiple Home Banners और Social Links</h3>
+                    <form onsubmit="saveHomePromotion(event)">
+                        <div class="form-group"><label>Banner Image URL</label><input id="adminBannerImageUrl" class="form-control" type="url" placeholder="https://example.com/banner.jpg" required></div>
+                        <div class="form-group"><label>Banner Title</label><input id="adminBannerTitle" class="form-control" placeholder="BSSC CGL Mock Test" required></div>
+                        <div class="form-group"><label>Banner Subtitle</label><input id="adminBannerSubtitle" class="form-control" placeholder="Full Practice Sets Available"></div>
+                        <div class="form-group"><label>इस Banner पर कौन-सा Batch खुले?</label><select id="adminBannerBatchSelect" class="form-control"></select></div>
+                        <button type="submit" class="btn-blue">+ Banner जोड़ें</button>
+                    </form>
+                    <div id="adminBannersList" class="admin-promotion-list"></div>
+                    <hr style="border:0;border-top:1px solid #e2e8f0;margin:14px 0;">
+                    <form onsubmit="saveSocialPromotion(event)">
+                        <div class="form-group"><label>Social Platform</label><select id="adminSocialPlatform" class="form-control"><option value="youtube">YouTube</option><option value="instagram">Instagram</option><option value="whatsapp">WhatsApp Channel</option><option value="telegram">Telegram</option></select></div>
+                        <div class="form-group"><label>Social Media Link</label><input id="adminSocialLink" class="form-control" type="url" placeholder="https://youtube.com/@yourchannel" required></div>
+                        <div class="form-group"><label>Link Name</label><input id="adminSocialName" class="form-control" placeholder="हमारे चैनल से जुड़ें"></div>
+                        <button type="submit" class="btn-blue">+ Social Link जोड़ें</button>
+                    </form>
+                    <div id="adminSocialList" class="admin-promotion-list"></div>
+                </div>
 
                 <!-- 1. CREATE NEW BATCH -->
                 <div class="admin-card">
@@ -587,15 +790,20 @@
                         <!-- Free / Paid Selection -->
 <div class="form-group" style="margin-top: 10px;">
     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: bold;">
-        <input type="checkbox" id="adminIsPaid" onchange="togglePriceField()"> 
-        <span>🔒 Make Paid Subject (सशुल्क बनाएं)</span>
+        <input type="checkbox" id="adminIsPaid" checked onchange="togglePriceField()"> 
+        <span>🔒 Paid Subject (डिफ़ॉल्ट: Paid — Free के लिए untick करें)</span>
     </label>
 </div>
 
 <!-- Price Input Box -->
-<div class="form-group" id="priceInputGroup" style="display: none; margin-top: 8px;">
-    <label>Price (₹ में)</label>
-    <input type="number" id="adminSubjectPrice" class="form-control" placeholder="उदा. 99">
+<div class="form-group" id="priceInputGroup" style="display: block; margin-top: 8px;">
+    <label>Plan Prices (₹ में)</label>
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;">
+        <input type="number" id="adminPrice6Months" class="form-control" value="99" placeholder="6 महीने" min="0">
+        <input type="number" id="adminPrice1Year" class="form-control" value="149" placeholder="1 साल" min="0">
+        <input type="number" id="adminPriceLifetime" class="form-control" value="299" placeholder="Lifetime" min="0">
+    </div>
+    <small style="display:block;color:#64748b;font-size:10px;margin-top:4px;">हर plan की अलग price भरें।</small>
 </div>
 
                         <div class="form-group">
@@ -723,7 +931,45 @@
                     <button type="button" class="btn-purple" onclick="generateAndCopyAIPrompt()"><i class="fa-solid fa-copy"></i> AI Prompt कॉपी करें</button>
                 </div>
 
-                <!-- 6. BULK JSON IMPORTER -->
+                <!-- 6. TEXT NOTES MANAGER -->
+                <div class="admin-card">
+                    <h3>6. Text Notes जोड़ें</h3>
+                    <form onsubmit="saveAdminNote(event)">
+                        <div class="form-group">
+                            <label>Subject / विषय</label>
+                            <input type="text" id="adminNoteSubject" class="form-control" placeholder="उदा. बायोलॉजी" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Chapter / अध्याय</label>
+                            <input type="text" id="adminNoteChapter" class="form-control" placeholder="उदा. कोशिका का अध्ययन" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Exam / Test Name (वैकल्पिक)</label>
+                            <input type="text" id="adminNoteTest" class="form-control" placeholder="उदा. Mock Test 01 — खाली छोड़ें तो पूरे Chapter में दिखेगा">
+                        </div>
+                        <div class="form-group">
+                            <label>Notes Title</label>
+                            <input type="text" id="adminNoteTitle" class="form-control" placeholder="उदा. कोशिका के पूरे Notes" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes Text</label>
+                            <textarea id="adminNoteText" class="form-control" rows="10" placeholder="यहाँ Notes लिखें या कॉपी-पेस्ट करें..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label style="display:flex; align-items:center; gap:8px;">
+                                <input type="checkbox" id="adminNoteIsPaid"> 🔒 Paid Notes
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Price (₹)</label>
+                            <input type="number" id="adminNotePrice" class="form-control" value="99" min="0">
+                        </div>
+                        <button type="submit" class="btn-blue"><i class="fa-solid fa-file-pdf"></i> Notes सेव करें</button>
+                    </form>
+                    <div id="adminNotesList" style="margin-top:12px;"></div>
+                </div>
+
+                <!-- 7. BULK JSON IMPORTER -->
                 <div class="admin-card">
                     <h3>6. Bulk JSON Test Importer</h3>
                     <div class="form-group">
@@ -736,11 +982,28 @@
             </div>
         </div>
 
-        <div class="app-bottom-nav">
-            <a class="nav-item active" onclick="switchView('app-view', document.querySelectorAll('.view-btn')[0]); showScreen('screen-home')"><i class="fa-solid fa-house"></i>Home</a>
-            <a class="nav-item"><i class="fa-solid fa-file-lines"></i>My Tests</a>
-            <a class="nav-item"><i class="fa-solid fa-chart-line"></i>Rankings</a>
-            <a class="nav-item"><i class="fa-solid fa-circle-user"></i>Profile</a>
+        <!-- MOBILE BOTTOM NAVIGATION -->
+        <div class="mobile-bottom-nav">
+            <button id="tab-mob-home" onclick="switchTab('home')" class="mobile-nav-tab active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </button>
+            <button id="tab-mob-tests" onclick="switchTab('tests')" class="mobile-nav-tab">
+                <i class="fa-solid fa-laptop-code"></i>
+                <span>Tests</span>
+            </button>
+            <button id="tab-mob-notes" onclick="switchTab('notes')" class="mobile-nav-tab">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Notes</span>
+            </button>
+            <button id="tab-mob-saved" onclick="switchTab('saved')" class="mobile-nav-tab">
+                <i class="fa-solid fa-bookmark"></i>
+                <span>Saved</span>
+            </button>
+            <button id="tab-mob-admin" onclick="switchTab('admin')" class="mobile-nav-tab">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Admin</span>
+            </button>
         </div>
 
     </div>
@@ -870,8 +1133,11 @@
 
                     renderAppBatches();
                     populateAdminDropdowns();
+                    renderAdminPromotionLists();
+                                renderAdminNotes();
+            renderPurchaseRequests();
 
-                    realtimeReady = true;
+            realtimeReady = true;
                     setRealtimeStatus('Synced (Realtime)', '#059669');
                 });
               })
@@ -896,11 +1162,168 @@
         window.onload = function() {
             renderAppBatches();
             populateAdminDropdowns();
+            renderAdminPromotionLists();
+            renderAdminNotes();
+            renderPurchaseRequests();
+            updateStudentActivityStats();
+            listenForStudentAccess();
             loadFromDbAndListen();
         };
 
         let currentActiveTest = null;
         let currentActiveTestQuestions = [];
+        const SAVED_QUESTIONS_KEY = 'vidya_saved_questions';
+
+        function getSavedQuestions() {
+            try { return JSON.parse(localStorage.getItem(SAVED_QUESTIONS_KEY) || '[]'); }
+            catch (error) { return []; }
+        }
+
+        function saveSavedQuestions(items) {
+            localStorage.setItem(SAVED_QUESTIONS_KEY, JSON.stringify(items));
+        }
+
+        function getQuestionSaveId(question, index) {
+            return String(question.id || question.question || question.q || 'question') + '::' + index;
+        }
+
+        function toggleSavedQuestion() {
+            const question = currentActiveTestQuestions[currentQuestionIndex];
+            if (!question || !currentActiveTest) return;
+            const id = getQuestionSaveId(question, currentQuestionIndex);
+            const saved = getSavedQuestions();
+            const existingIndex = saved.findIndex(item => item.id === id && item.testId === currentActiveTest.id);
+            if (existingIndex >= 0) saved.splice(existingIndex, 1);
+            else saved.unshift({
+                id,
+                type: 'question',
+                source: 'test',
+                testId: currentActiveTest.id,
+                testName: currentActiveTest.name,
+                question: question.question || question.q || '',
+                options: question.options || [],
+                answer: question.answer !== undefined ? question.answer : question.correct,
+                solution: question.solution || '',
+                savedAt: new Date().toISOString()
+            });
+            saveSavedQuestions(saved);
+            updateSavedQuestionButton();
+        }
+
+        function updateSavedQuestionButton() {
+            const button = document.querySelector('#screen-exam .saved-header-btn');
+            const question = currentActiveTestQuestions[currentQuestionIndex];
+            if (!button || !question || !currentActiveTest) return;
+            const id = getQuestionSaveId(question, currentQuestionIndex);
+            const isSaved = getSavedQuestions().some(item => item.id === id && item.testId === currentActiveTest.id);
+            button.classList.toggle('saved', isSaved);
+            button.title = isSaved ? 'Saved Question — खोलें' : 'Save Question';
+            button.setAttribute('aria-label', button.title);
+        }
+
+        function saveQuestionFromHeader() {
+            if (!currentActiveTest) return;
+
+            // Solution screen में उसी solution वाले प्रश्न को सेव करें।
+            const isSolutionScreen = document.getElementById('screen-solution')?.classList.contains('active');
+            const questionIndex = isSolutionScreen ? solCurrentIndex : currentQuestionIndex;
+            const question = currentActiveTestQuestions[questionIndex];
+            if (!question) return;
+
+            const id = getQuestionSaveId(question, questionIndex);
+            const saved = getSavedQuestions();
+            const existingIndex = saved.findIndex(item => item.id === id && item.testId === currentActiveTest.id);
+
+            if (existingIndex >= 0) {
+                saved.splice(existingIndex, 1);
+            } else {
+                saved.unshift({
+                    id,
+                    type: 'question',
+                    source: 'test',
+                    testId: currentActiveTest.id,
+                    testName: currentActiveTest.name,
+                    question: question.question || question.q || '',
+                    options: question.options || [],
+                    answer: question.answer !== undefined ? question.answer : question.correct,
+                    solution: question.solution || '',
+                    savedAt: new Date().toISOString()
+                });
+            }
+
+            saveSavedQuestions(saved);
+            updateSavedQuestionButton();
+            updateSavedHeaderButtons();
+        }
+
+        function updateSavedHeaderButtons() {
+            const questionIndex = document.getElementById('screen-solution')?.classList.contains('active')
+                ? solCurrentIndex
+                : currentQuestionIndex;
+            const question = currentActiveTestQuestions[questionIndex];
+            if (!question || !currentActiveTest) return;
+
+            const id = getQuestionSaveId(question, questionIndex);
+            const isSaved = getSavedQuestions().some(item => item.id === id && item.testId === currentActiveTest.id);
+            document.querySelectorAll('.saved-header-btn').forEach(button => {
+                button.classList.toggle('saved', isSaved);
+                button.title = isSaved ? 'Saved Question — हटाने के लिए क्लिक करें' : 'Save Question';
+                button.setAttribute('aria-label', button.title);
+            });
+        }
+
+        function removeSavedQuestion(id) {
+            saveSavedQuestions(getSavedQuestions().filter(item => item.id !== id));
+            renderSavedQuestions();
+        }
+
+        function renderSavedQuestions(folder) {
+            const container = document.getElementById('studentNotesContainer');
+            if (!container) return;
+            const saved = getSavedQuestions();
+            const header = document.querySelector('#screen-notes .nav-back-header h3');
+            if (header) header.innerText = folder ? 'Saved / ' + folder : 'Saved Folders';
+
+            if (!folder) {
+                const questionItems = saved.filter(item => item.type !== 'pdf' && item.type !== 'test');
+                const pdfItems = saved.filter(item => item.type === 'pdf');
+                const testItems = saved.filter(item => item.type === 'test');
+                const folders = [
+                    { name: 'Saved Questions', icon: 'fa-circle-question', color: '#4338ca', items: questionItems, folder: 'Questions' },
+                    { name: 'PDF Notes', icon: 'fa-file-pdf', color: '#dc2626', items: pdfItems, folder: 'PDF Notes' },
+                    { name: 'Completed Tests', icon: 'fa-clipboard-check', color: '#059669', items: testItems, folder: 'Tests' }
+                ];
+                container.innerHTML = folders.map(item => `
+                    <div class="notes-navigation-card" onclick="renderSavedQuestions('${item.folder}')">
+                        <h3 style="color:${item.color};"><i class="fa-solid ${item.icon}"></i> ${item.name}</h3>
+                        <p>${item.items.length} saved item(s) — खोलने के लिए क्लिक करें</p>
+                    </div>`).join('');
+                return;
+            }
+
+            const items = folder === 'PDF Notes'
+                ? saved.filter(item => item.type === 'pdf')
+                : folder === 'Questions'
+                    ? saved.filter(item => item.type !== 'pdf' && item.type !== 'test')
+                    : saved.filter(item => item.type === 'test');
+            container.innerHTML = `<div class="nav-back-header"><button class="nav-back-btn" onclick="renderSavedQuestions()"><i class="fa-solid fa-arrow-left"></i></button><h3 style="font-size:14px;">${escapeHtml(folder)}</h3></div>` +
+                (items.length ? items.map(item => {
+                    if (item.type === 'pdf') return `<article class="saved-question-card"><div class="saved-question-title"><i class="fa-solid fa-file-pdf"></i> ${escapeHtml(item.title || 'PDF Note')}</div><div class="note-content">${escapeHtml(item.text || '')}</div><span class="saved-meta">Saved: ${new Date(item.savedAt).toLocaleString('hi-IN')}</span><button type="button" class="note-action-btn delete-btn" style="width:100%;margin-top:10px;" onclick="removeSavedQuestion('${escapeJs(item.id)}')">Remove Saved</button></article>`;
+                    if (item.type === 'test') return `<article class="saved-question-card"><div class="saved-question-title"><i class="fa-solid fa-clipboard-check"></i> ${escapeHtml(item.testName || 'Completed Test')}</div><div style="font-size:11px;color:#64748b;margin-bottom:8px;">Attempt #${escapeHtml(item.attemptNumber || 1)} · ${new Date(item.savedAt).toLocaleString('hi-IN')}</div><div class="stats-grid"><div class="stat-card"><h5>SCORE</h5><div class="val">${escapeHtml(item.score || '0')}</div></div><div class="stat-card"><h5>ACCURACY</h5><div class="val">${escapeHtml(item.accuracy || 0)}%</div></div><div class="stat-card"><h5>ATTEMPTED</h5><div class="val">${escapeHtml(item.attempted || 0)} / ${escapeHtml(item.total || 0)}</div></div><div class="stat-card"><h5>TIME</h5><div class="val" style="font-size:11px;">${escapeHtml(item.timeSpent || '00:00')}</div></div></div><div class="analysis-section"><strong>Analysis</strong>${Object.entries(item.analysis || {}).map(([section, stats]) => `<div class="analysis-item"><span>${escapeHtml(section)}</span><span>${escapeHtml(stats.correct)} / ${escapeHtml(stats.total)} Correct</span></div>`).join('')}</div><span class="saved-meta">Completed: ${new Date(item.savedAt).toLocaleString('hi-IN')}</span><button type="button" class="btn-blue" style="width:100%;margin-top:10px;" onclick="viewSavedTestAnalysis('${escapeJs(item.id)}')"><i class="fa-solid fa-chart-line"></i> View Analysis</button><button type="button" class="note-action-btn delete-btn" style="width:100%;margin-top:10px;" onclick="removeSavedQuestion('${escapeJs(item.id)}')"><i class="fa-solid fa-trash"></i> Remove Saved</button></article>`;
+                    const correctAnswer = Number(item.answer);
+                    const options = Array.isArray(item.options) ? item.options : [];
+                    return `<article class="saved-question-card"><div style="font-size:11px;color:#64748b;margin-bottom:5px;">${escapeHtml(item.testName || 'Saved Question')}</div><div class="saved-question-title">${escapeHtml(item.question || '')}</div><div>${options.map((option, index) => `<div class="saved-option ${index === correctAnswer ? 'saved-correct' : ''}"><b>${String.fromCharCode(65 + index)}.</b> ${escapeHtml(option)}${index === correctAnswer ? ' ✓' : ''}</div>`).join('')}</div><span class="saved-meta"><i class="fa-regular fa-clock"></i> Saved: ${new Date(item.savedAt).toLocaleString('hi-IN')}</span>${item.solution ? `<div class="solution-box show"><strong>Solution / व्याख्या:</strong><br>${escapeHtml(item.solution)}</div>` : ''}<button type="button" class="note-action-btn delete-btn" style="width:100%;margin-top:10px;" onclick="removeSavedQuestion('${escapeJs(item.id)}')"><i class="fa-solid fa-trash"></i> Remove Saved</button></article>`;
+                }).join('') : '<div class="notes-empty">इस folder में अभी कुछ saved नहीं है।</div>');
+        }
+
+        function savePdfNote(note) {
+            if (!note || !note.id) return;
+            const saved = getSavedQuestions();
+            if (!saved.some(item => item.id === 'pdf::' + note.id)) {
+                saved.unshift({ id: 'pdf::' + note.id, type: 'pdf', source: 'pdf', title: note.title, text: note.text || '', savedAt: new Date().toISOString() });
+                saveSavedQuestions(saved);
+            }
+        }
         let currentQuestionIndex = 0;
         let selectedOptionIndex = null;
         let userAnswers = {};
@@ -912,6 +1335,50 @@
         let totalTimeSeconds = 0;
         let remainingSeconds = 0;
         let timerInterval = null;
+
+        function switchTab(tab) {
+            const tabButtons = document.querySelectorAll('.mobile-nav-tab');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.getElementById(`tab-mob-${tab}`);
+            if (activeButton) activeButton.classList.add('active');
+
+            if (tab === 'admin') {
+                const adminButton = document.querySelector('.view-btn:nth-child(2)');
+                switchView('admin-view', adminButton);
+                return;
+            }
+
+            const studentButton = document.querySelector('.view-btn:first-child');
+            switchView('app-view', studentButton);
+
+            if (tab === 'home') {
+                document.getElementById('app-view')?.classList.remove('tests-only');
+                const batchSearchPanel = document.getElementById('batchSearchPanel');
+                if (batchSearchPanel) batchSearchPanel.style.display = 'none';
+                showScreen('screen-home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (tab === 'notes') {
+                renderStudentNotes();
+                showScreen('screen-notes');
+            } else if (tab === 'saved') {
+                renderSavedQuestions();
+                showScreen('screen-notes');
+            } else if (tab === 'tests') {
+                const appView = document.getElementById('app-view');
+                appView?.classList.add('tests-only');
+                const search = document.getElementById('allTestsSearch');
+                if (search) search.value = '';
+                const batchSearch = document.getElementById('batchSearchInput');
+                if (batchSearch) batchSearch.value = '';
+                const batchSearchPanel = document.getElementById('batchSearchPanel');
+                if (batchSearchPanel) batchSearchPanel.style.display = 'block';
+                renderBatchListForTests();
+                showScreen('screen-home');
+            } else {
+                showScreen('screen-home');
+                alert(`${tab.charAt(0).toUpperCase() + tab.slice(1)} section अभी उपलब्ध नहीं है।`);
+            }
+        }
 
         function switchView(viewId, btn) {
             // Admin protection
@@ -939,6 +1406,11 @@
 
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.view-btn').forEach(el => el.classList.remove('active'));
+            if (viewId === 'app-view') {
+                document.getElementById('app-view')?.classList.remove('tests-only');
+                const batchSearchPanel = document.getElementById('batchSearchPanel');
+                if (batchSearchPanel) batchSearchPanel.style.display = 'none';
+            }
             document.getElementById(viewId).classList.add('active');
             if (btn) btn.classList.add('active');
         }
@@ -949,10 +1421,142 @@
             document.getElementById('home-header-wrapper').style.display = (screenId === 'screen-home') ? 'block' : 'none';
         }
 
+        let homeBannerIndex = 0;
+        let homeBannerTimer = null;
+        let allTestsCache = [];
+
+        function getHomePromotion() {
+            const promotion = localData.homePromotion || {};
+            return {
+                banners: Array.isArray(promotion.banners) ? promotion.banners : (promotion.imageUrl ? [promotion] : []),
+                socials: Array.isArray(promotion.socials) ? promotion.socials : (promotion.socialUrl ? [{ platform: 'link', url: promotion.socialUrl, name: promotion.socialName }] : [])
+            };
+        }
+
+        function renderHomePromotion() {
+            const promotion = getHomePromotion();
+            const slider = document.getElementById('homeBannerSlider');
+            const social = document.getElementById('socialLinkStrip');
+            if (slider) {
+                const banners = promotion.banners.length ? promotion.banners : [{ title: 'विद्याTest', subtitle: 'अभ्यास करें और सफल बनें' }];
+                slider.innerHTML = `<div class="banner-track">${banners.map((banner, index) => `<div class="banner-slide" role="button" tabindex="0" onclick="openPromotedBatch('${escapeJs(banner.batchId || getBatchIdForTest(banner.testId) || '')}')" onkeydown="if(event.key==='Enter'||event.key===' ') openPromotedBatch('${escapeJs(banner.batchId || getBatchIdForTest(banner.testId) || '')}')" style="${banner.imageUrl ? '' : 'background:linear-gradient(135deg,#ff7e5f,#feb47b);'}">${banner.imageUrl ? `<img src="${safeUrl(banner.imageUrl)}" alt="Banner">` : ''}<div class="banner-slide-content"><h4>${escapeHtml(banner.title || 'Test')}</h4><p>${escapeHtml(banner.subtitle || '')}</p><button class="start-btn" style="background:#fff;color:#f97316;align-self:flex-start;" tabindex="-1">Open Batch</button></div></div>`).join('')}</div>`;
+                homeBannerIndex = 0;
+            }
+            if (social) {
+                const icons = { youtube: 'fa-youtube', instagram: 'fa-instagram', whatsapp: 'fa-whatsapp', telegram: 'fa-telegram', link: 'fa-link' };
+                const links = promotion.socials.length ? promotion.socials : [{ platform: 'link', url: '#', name: 'हमारे Social Media से जुड़ें' }];
+                                        social.innerHTML = `<i class="fa-solid fa-share-nodes"></i><div class="social-track">${links.map(item => `<a class="${escapeJs(item.platform || 'link')}" href="${socialUrl(item.url)}" target="_blank" rel="noopener noreferrer" onclick="openSocialLink(event, '${escapeJs(item.url)}')"><i class="fa-brands ${icons[item.platform] || icons.link}"></i> ${escapeHtml(item.name || item.platform)}</a>`).join('')}</div>`;
+            }
+            clearInterval(homeBannerTimer);
+            homeBannerTimer = setInterval(() => {
+                const track = document.querySelector('#homeBannerSlider .banner-track');
+                const count = promotion.banners.length || 1;
+                if (track && count > 1) track.style.transform = `translateX(-${(homeBannerIndex = (homeBannerIndex + 1) % count) * 100}%)`;
+            }, 4500);
+        }
+
+        function saveHomePromotion(event) {
+            event.preventDefault();
+            const promotion = getHomePromotion();
+            const batchId = document.getElementById('adminBannerBatchSelect').value;
+            promotion.banners.push({ imageUrl: document.getElementById('adminBannerImageUrl').value.trim(), title: document.getElementById('adminBannerTitle').value.trim(), subtitle: document.getElementById('adminBannerSubtitle').value.trim(), batchId });
+            localData.homePromotion = promotion;
+            event.target.reset();
+            scheduleSaveToDb(); renderHomePromotion(); renderAdminPromotionLists();
+        }
+
+        function saveSocialPromotion(event) {
+            event.preventDefault();
+            const promotion = getHomePromotion();
+            promotion.socials.push({ platform: document.getElementById('adminSocialPlatform').value, url: document.getElementById('adminSocialLink').value.trim(), name: document.getElementById('adminSocialName').value.trim() || 'हमसे जुड़ें' });
+            localData.homePromotion = promotion;
+            event.target.reset();
+            scheduleSaveToDb(); renderHomePromotion(); renderAdminPromotionLists();
+        }
+
+        function getBatchIdForTest(testId) {
+            const item = collectAllTests().find(entry => String(entry.test.id) === String(testId));
+            return item ? item.batch.id : '';
+        }
+
+        function openPromotedBatch(batchId) {
+            const batch = (localData.batches || []).find(item => String(item.id) === String(batchId));
+            if (batch) openBatchSyllabus(batch.id);
+            else switchTab('tests');
+        }
+
+        // पुराने banners के लिए fallback
+        function openPromotedTest(testId) {
+            const item = collectAllTests().find(entry => String(entry.test.id) === String(testId));
+            if (item) openPromotedBatch(item.batch.id);
+            else switchTab('tests');
+        }
+
+        function renderAdminPromotionLists() {
+            const promotion = getHomePromotion();
+            const banners = document.getElementById('adminBannersList');
+            const socials = document.getElementById('adminSocialList');
+            if (banners) banners.innerHTML = promotion.banners.map((item, index) => `<div class="admin-promotion-item">${item.imageUrl ? `<img src="${safeUrl(item.imageUrl)}">` : '<span>🖼️</span>'}<span style="flex:1;">${escapeHtml(item.title)}</span><button type="button" class="delete-btn action-icon-btn" onclick="removePromotionItem('banners',${index})"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            if (socials) socials.innerHTML = promotion.socials.map((item, index) => `<div class="admin-promotion-item"><span style="flex:1;"><i class="fa-brands fa-${escapeJs(item.platform)}"></i> ${escapeHtml(item.name)}</span><button type="button" class="delete-btn action-icon-btn" onclick="removePromotionItem('socials',${index})"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+            populateBannerBatchSelect();
+        }
+
+        function populateBannerBatchSelect() {
+            const select = document.getElementById('adminBannerBatchSelect');
+            if (!select) return;
+            select.innerHTML = (localData.batches || []).map(batch => `<option value="${escapeHtml(batch.id)}">${escapeHtml(batch.name)}</option>`).join('');
+        }
+
+        function removePromotionItem(type, index) {
+            const promotion = getHomePromotion();
+            promotion[type].splice(index, 1);
+            localData.homePromotion = promotion;
+            scheduleSaveToDb(); renderHomePromotion(); renderAdminPromotionLists();
+        }
+
+        function collectAllTests() {
+            allTestsCache = [];
+            (localData.batches || []).forEach(batch => (batch.subjects || []).forEach(subject => (subject.chapters || []).forEach(chapter => (chapter.tests || []).forEach(test => {
+                allTestsCache.push({ batch, subject, chapter, test });
+            }))));
+            return allTestsCache;
+        }
+
+        function renderBatchListForTests(searchText = '') {
+            const container = document.getElementById('batchContainer');
+            if (!container) return;
+            const query = String(searchText || '').trim().toLowerCase();
+            const batches = (localData.batches || []).filter(batch => String(batch.name || '').toLowerCase().includes(query));
+            container.innerHTML = batches.map(batch => `
+                <div class="category-card" onclick="openBatchSyllabus('${escapeJs(batch.id)}')">
+                    <div class="cat-icon" style="background:#4f46e5;"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="cat-title">${escapeHtml(batch.name)}</div>
+                </div>`).join('') || '<div class="notes-empty">कोई Batch उपलब्ध नहीं है।</div>';
+        }
+
+        function filterBatchList(value) {
+            renderBatchListForTests(value);
+        }
+
+        function renderAllTests(searchText = '') {
+            const container = document.getElementById('test-list-container');
+            if (!container) return;
+            const query = String(searchText || '').trim().toLowerCase();
+            const tests = collectAllTests().filter(item => [item.test.name, item.subject.name, item.chapter.name, item.batch.name].some(value => String(value || '').toLowerCase().includes(query)));
+            container.innerHTML = tests.length ? tests.map(({ batch, subject, chapter, test }) => {
+                const hasResult = hasCompletedTestResult(test.id);
+                return `<div class="test-card" style="align-items:flex-start;gap:8px;"><div style="flex:1;min-width:0;"><h4>${escapeHtml(test.name)}</h4><span style="font-size:10px;color:#64748b;">${escapeHtml(subject.name)} · ${escapeHtml(chapter.name)} · ${(test.questions || []).length} Qs</span></div><div style="display:flex;flex-direction:column;gap:6px;"><button class="start-btn" onclick="startTest('${escapeJs(batch.id)}','${escapeJs(subject.id)}','${escapeJs(chapter.id)}','${escapeJs(test.id)}')">${hasResult ? 'Re-attempt' : 'Start'}</button>${hasResult ? `<button class="test-notes-btn" style="background:#059669;" onclick="viewLatestTestAnalysis('${escapeJs(test.id)}')">View</button>` : ''}</div></div>`;
+            }).join('') : '<div class="notes-empty">कोई टेस्ट नहीं मिला।</div>';
+        }
+
+        function filterAllTests(value) { renderAllTests(value); }
+
         function renderAppBatches() {
             const container = document.getElementById('batchContainer');
             if (!container) return;
             container.innerHTML = '';
+            renderHomePromotion();
+            renderAllTests(document.getElementById('allTestsSearch')?.value || '');
             (localData.batches || []).forEach(b => {
                 container.innerHTML += `
                     <div class="category-card" onclick="openBatchSyllabus('${b.id}')">
@@ -974,8 +1578,9 @@
                                  <div>
             <h4>
               <i class="fa-solid fa-book" style="color:var(--primary);margin-right:6px;"></i>
-              ${sub.name}
+              ${escapeHtml(sub.name)}
             </h4>
+            <small style="display:block;color:#94a3b8;font-size:9px;margin-top:4px;">Subject ID: ${escapeHtml(sub.id)}</small>
           </div>
           <div>
             ${sub.isPaid && !isUnlocked(sub.id) ? `<span style="background:#fee2e2; color:#ef4444; padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold; margin-right:6px;">🔒 ₹${sub.price || 99}</span>` : ''}
@@ -986,30 +1591,311 @@
             });
             showScreen('screen-syllabus');
         }
-function isUnlocked(subjectId) {
-    return localStorage.getItem('unlocked_' + subjectId) === 'true';
+function getAccessRecord(subjectId) {
+    const raw = localStorage.getItem('access_' + subjectId);
+    if (!raw) return null;
+
+    try {
+        const access = JSON.parse(raw);
+        if (access.lifetime || Number(access.expiresAt) > Date.now()) return access;
+        localStorage.removeItem('access_' + subjectId);
+    } catch (error) {
+        localStorage.removeItem('access_' + subjectId);
+    }
+    return null;
 }
-function grantAccessFromAdmin() {
+
+const cloudAccessCache = {};
+const GLOBAL_ACCESS_KEY = 'allTests';
+
+function hasValidAccess(access) {
+    return Boolean(access && (access.lifetime || Number(access.expiresAt) > Date.now()));
+}
+
+function isUnlocked(resourceId) {
+    // एक global plan access student के सभी paid subjects, tests और notes खोलता है।
+    return Boolean(
+        hasValidAccess(getAccessRecord(GLOBAL_ACCESS_KEY)) ||
+        hasValidAccess(cloudAccessCache[GLOBAL_ACCESS_KEY]) ||
+        // पुराने subject-specific access records भी compatible रखे गए हैं।
+        hasValidAccess(getAccessRecord(resourceId)) ||
+        hasValidAccess(cloudAccessCache[resourceId])
+    );
+}
+
+function listenForStudentAccess() {
+    const studentId = getStudentId();
+    db.ref(APP_DATA_PATH + '/studentAccess/' + studentId).on('value', snapshot => {
+        const accessList = snapshot.val() || {};
+        Object.keys(cloudAccessCache).forEach(key => delete cloudAccessCache[key]);
+        Object.keys(accessList).forEach(resourceId => {
+            const access = accessList[resourceId];
+            if (hasValidAccess(access)) {
+                cloudAccessCache[resourceId] = access;
+            }
+        });
+        renderAppBatches();
+    });
+}
+
+let activeUnlockSubjectId = '';
+
+function updateStudentActivityStats() {
+    const studentCount = document.getElementById('adminStudentCount');
+    const attemptCount = document.getElementById('adminAttemptCount');
+    if (attemptCount) attemptCount.textContent = String(getSavedQuestions().filter(item => item.type === 'test').length);
+    if (studentCount) {
+        db.ref(APP_DATA_PATH + '/studentRegistry').once('value').then(snapshot => {
+            studentCount.textContent = String(Object.keys(snapshot.val() || {}).length);
+        }).catch(() => { studentCount.textContent = '—'; });
+    }
+}
+
+function findTestById(testId) {
+    for (const batch of (localData.batches || [])) {
+        for (const subject of (batch.subjects || [])) {
+            for (const chapter of (subject.chapters || [])) {
+                const test = (chapter.tests || []).find(item => item.id === testId);
+                if (test) return test;
+            }
+        }
+    }
+    return null;
+}
+
+function viewLatestTestAnalysis(testId) {
+    const latestResult = getSavedQuestions().find(item => item.type === 'test' && item.testId === testId);
+    if (latestResult) viewSavedTestAnalysis(latestResult.id);
+}
+
+function viewSavedTestAnalysis(resultId) {
+    const result = getSavedQuestions().find(item => item.id === resultId && item.type === 'test');
+    if (!result) return;
+    currentActiveTest = findTestById(result.testId);
+    currentActiveTestQuestions = currentActiveTest?.questions || [];
+    userAnswers = result.answers || {};
+    questionTimeSpent = result.questionTimeSpent || {};
+    document.getElementById('resTestTitle').innerText = result.testName || 'Test Result';
+    document.getElementById('resTotalMarks').innerText = result.score || '0 / 0';
+    document.getElementById('resPercentile').innerText = (result.percentile || 0) + '%';
+    document.getElementById('resTimeSpent').innerText = result.timeSpent || '00:00 Min';
+    document.getElementById('resAccuracy').innerText = (result.accuracy || 0) + '%';
+    document.getElementById('resAttempted').innerText = (result.attempted || 0) + ' / ' + (result.total || 0);
+    const analysis = document.getElementById('subjectAnalysisContainer');
+    analysis.innerHTML = Object.entries(result.analysis || {}).map(([section, stats]) => {
+        const percentage = stats.total ? Math.round(stats.correct / stats.total * 100) : 0;
+        return `<div class="analysis-item"><span><strong>${escapeHtml(section)}</strong> (${stats.correct}/${stats.total} Correct)</span><span class="${percentage >= 50 ? 'badge-strong' : 'badge-weak'}">${percentage >= 50 ? 'Strong' : 'Weak'}</span></div>`;
+    }).join('') || '<div class="notes-empty">Analysis उपलब्ध नहीं है।</div>';
+    showScreen('screen-result');
+}
+
+function getStudentId() {
+    let id = localStorage.getItem('vidya_student_id');
+    if (!id) {
+        id = 'student_' + Math.random().toString(36).slice(2, 8).toUpperCase();
+        localStorage.setItem('vidya_student_id', id);
+    }
+    db.ref(APP_DATA_PATH + '/studentRegistry/' + firebaseSafeKey(id)).update({
+        studentId: id,
+        lastSeenAt: firebase.database.ServerValue.TIMESTAMP
+    }).catch(error => console.warn('Student registry unavailable:', error));
+    updateStudentActivityStats();
+    return id;
+}
+
+function openUnlockModal(subjectId, subjectName, price) {
+    activeUnlockSubjectId = subjectId;
+    const modal = document.getElementById('unlockModal');
+    if (!modal) return;
+    document.getElementById('modalSubjectTitle').innerText = subjectName || 'Subject';
+    const studentInput = document.getElementById('purchaseStudentId');
+    if (studentInput) studentInput.value = getStudentId();
+    const plan = document.getElementById('purchasePlan');
+    if (plan) plan.dataset.price = price || 0;
+    modal.style.display = 'flex';
+    updatePurchasePlanPrice();
+}
+
+function updatePurchasePlanPrice() {
+    const plan = document.getElementById('purchasePlan')?.value || '6months';
+    const subject = (localData.batches || []).flatMap(batch => batch.subjects || []).find(item => item.id === activeUnlockSubjectId);
+    const priceEl = document.getElementById('purchasePlanPrice');
+    if (priceEl) priceEl.textContent = 'Price: ₹' + getPlanPrice(subject, plan);
+}
+
+function closeUnlockModal() {
+    const modal = document.getElementById('unlockModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function firebaseSafeKey(value) {
+    return encodeURIComponent(String(value || '').trim()).replace(/[.#$[\]]/g, char => '%' + char.charCodeAt(0).toString(16));
+}
+
+let purchaseRequestInProgress = false;
+
+function sendPaymentScreenshotOnWhatsApp() {
+    const studentId = document.getElementById('purchaseStudentId')?.value.trim() || getStudentId();
+    const plan = document.getElementById('purchasePlan')?.value || '6months';
+    const subject = (localData.batches || []).flatMap(batch => batch.subjects || []).find(item => item.id === activeUnlockSubjectId);
+    const planName = { '6months': '6 महीने', '1year': '1 साल', lifetime: 'Lifetime' }[plan] || plan;
+    const message = [
+        'नमस्ते, मुझे Subject का access activate करवाना है।',
+        '',
+        'Student ID: ' + studentId,
+        'Selected Subject: ' + (subject?.name || activeUnlockSubjectId || 'N/A'),
+        'Plan Access: पूरे account के सभी paid Tests',
+        'Plan: ' + planName,
+        'Price: ₹' + getPlanPrice(subject, plan),
+        '',
+        'Payment screenshot इसी WhatsApp chat में attach कर रहा/रही हूँ।'
+    ].join('\\n');
+    window.open('https://wa.me/918102434723?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
+}
+
+function getPlanPrice(subject, plan) {
+    // हर plan की non-zero default price; पुराने subjects के लिए भी fallback रहेगा।
+    const defaultPrices = {
+        '6months': 99,
+        '1year': 149,
+        lifetime: 299
+    };
+    const prices = subject?.planPrices || {};
+    const planPrice = Number(prices[plan]);
+
+    if (Number.isFinite(planPrice) && planPrice > 0) {
+        return planPrice;
+    }
+
+    const oldPrice = Number(subject?.price);
+    return Number.isFinite(oldPrice) && oldPrice > 0
+        ? oldPrice
+        : defaultPrices[plan] || defaultPrices['6months'];
+}
+
+function submitPurchaseRequest() {
+    if (purchaseRequestInProgress) return;
+
+    const studentId = document.getElementById('purchaseStudentId')?.value.trim() || getStudentId();
+    const plan = document.getElementById('purchasePlan')?.value || '6months';
+    const subject = (localData.batches || []).flatMap(batch => batch.subjects || []).find(item => item.id === activeUnlockSubjectId);
+    if (!activeUnlockSubjectId || !studentId) return alert('Student ID आवश्यक है।');
+
+    const validPlans = ['6months', '1year', 'lifetime'];
+    if (!validPlans.includes(plan)) return alert('कृपया सही plan चुनें।');
+
+    const request = {
+        id: 'request_' + Date.now(),
+        studentId,
+        // चुना हुआ plan पूरे account के paid tests के लिए लागू होगा।
+        accessScope: 'allTests',
+        subjectId: activeUnlockSubjectId,
+        subjectName: subject?.name || activeUnlockSubjectId,
+        price: getPlanPrice(subject, plan),
+        plan,
+        status: 'pending',
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    purchaseRequestInProgress = true;
+    const requestRef = db.ref(APP_DATA_PATH + '/purchaseRequests/' + request.id);
+
+    requestRef.set(request)
+        .then(() => {
+            localStorage.setItem('vidya_student_id', studentId);
+            closeUnlockModal();
+            alert('Purchase request भेज दी गई है। Admin verification के बाद access activate होगा।');
+        })
+        .catch(error => {
+            console.error('Purchase request error:', error);
+            const code = error?.code || 'unknown-error';
+            const message = error?.message || 'Unknown Firebase error';
+
+            if (code === 'PERMISSION_DENIED' || /permission_denied/i.test(message)) {
+                alert('Purchase request असफल: Firebase Database Rules ने write रोक दिया है।\n\nPath: ' + APP_DATA_PATH + '/purchaseRequests\nError: ' + code);
+            } else if (code === 'NETWORK_ERROR' || /network|offline/i.test(message)) {
+                alert('Purchase request असफल: Internet/Firebase connection उपलब्ध नहीं है।\n\nError: ' + code);
+            } else {
+                alert('Purchase request असफल।\n\nError: ' + code + '\n' + message);
+            }
+        })
+        .finally(() => {
+            purchaseRequestInProgress = false;
+        });
+}
+
+function renderPurchaseRequests() {
+    const container = document.getElementById('adminPurchaseRequests');
+    if (!container) return;
+    db.ref(APP_DATA_PATH + '/purchaseRequests').on('value', snapshot => {
+        const requests = snapshot.val() || {};
+        const entries = Object.entries(requests).filter(([, request]) => request.status !== 'approved');
+        container.innerHTML = '<h4 style="font-size:12px;color:#1e293b;margin-bottom:8px;">Pending Purchase Requests</h4>' +
+            (entries.length ? entries.map(([id, request]) => `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:9px;margin-bottom:6px;font-size:11px;display:flex;justify-content:space-between;gap:8px;align-items:center;"><span><b>${escapeHtml(request.studentId)}</b><br>Subject: ${escapeHtml(request.subjectId)}<br>Plan: ${escapeHtml(request.plan)}</span><button type="button" onclick="activatePurchaseRequest('${escapeJs(id)}')" style="background:#16a34a;color:#fff;border:0;border-radius:6px;padding:7px;font-size:11px;font-weight:700;">Activate</button></div>`).join('') : '<p style="font-size:11px;color:#64748b;">कोई pending request नहीं है।</p>');
+    });
+}
+
+function activatePurchaseRequest(requestId) {
+    db.ref(APP_DATA_PATH + '/purchaseRequests/' + requestId).once('value').then(snapshot => {
+        const request = snapshot.val();
+        if (!request) return;
+        document.getElementById('adminSubIdInput').value = request.subjectId;
+        document.getElementById('adminAccessDuration').value = request.plan;
+        grantAccessFromAdmin(requestId, request.studentId);
+    });
+}
+
+function grantAccessFromAdmin(requestId, studentId) {
     const inputField = document.getElementById('adminSubIdInput');
-    const subId = inputField.value ? inputField.value.trim() : '';
+    const studentInput = document.getElementById('adminStudentIdInput');
+    const subId = inputField && inputField.value ? inputField.value.trim() : '';
+    const selectedStudentId = studentId || (studentInput && studentInput.value ? studentInput.value.trim() : '');
+    const duration = document.getElementById('adminAccessDuration')?.value || '6months';
 
     if (!subId) {
-        alert("⚠️ कृपया WhatsApp से आई हुई Subject ID डालें!");
+        alert('⚠️ कृपया Student की Subject ID डालें!');
         return;
     }
 
-    // LocalStorage में अनलॉक सेट करें
-    localStorage.setItem('unlocked_' + subId, 'true');
-    alert(`🎉 बधाई हो! ${subId} का एक्सेस चालू कर दिया गया है।`);
-    
-    if (inputField) inputField.value = ''; // इनपुट साफ़ करें
-    
-    // स्क्रीन रिफ्रेश / अपडेट
-    if (typeof showScreen === 'function') {
-        showScreen('screen-syllabus');
-    } else {
-        location.reload();
+    const access = {
+        accessScope: 'allTests',
+        plan: duration,
+        activatedAt: Date.now(),
+        expiresAt: null,
+        lifetime: duration === 'lifetime'
+    };
+
+    if (duration === '6months') {
+        access.expiresAt = Date.now() + (182 * 24 * 60 * 60 * 1000);
+    } else if (duration === '1year') {
+        access.expiresAt = Date.now() + (365 * 24 * 60 * 60 * 1000);
     }
+
+    const accessKey = (selectedStudentId || getStudentId()) + '_' + GLOBAL_ACCESS_KEY;
+    localStorage.setItem('access_' + GLOBAL_ACCESS_KEY, JSON.stringify(access));
+    localStorage.setItem('access_' + accessKey, JSON.stringify(access));
+    localStorage.removeItem('unlocked_' + subId);
+
+    const planName = { '6months': '6 महीने', '1year': '1 साल', lifetime: 'Lifetime' }[duration];
+    const finishActivation = () => {
+        const cloudAccess = { ...access, accessScope: GLOBAL_ACCESS_KEY };
+        const writes = {};
+        if (selectedStudentId) writes[APP_DATA_PATH + '/studentAccess/' + selectedStudentId + '/' + GLOBAL_ACCESS_KEY] = cloudAccess;
+        if (requestId) writes[APP_DATA_PATH + '/purchaseRequests/' + requestId + '/status'] = 'approved';
+        if (requestId) writes[APP_DATA_PATH + '/purchaseRequests/' + requestId + '/approvedAt'] = firebase.database.ServerValue.TIMESTAMP;
+        return Object.keys(writes).length ? db.ref().update(writes) : Promise.resolve();
+    };
+    finishActivation()
+        .then(() => {
+            alert(`✅ ${selectedStudentId || 'Student'} के लिए ${subId} का ${planName} access activate हो गया है।`);
+        })
+        .catch(error => {
+            console.error('request update error:', error);
+            alert('Access activate नहीं हो सका। Firebase Database Rules में appData path पर write अनुमति दें।');
+        });
+    if (inputField) inputField.value = '';
+    if (studentInput) studentInput.value = '';
+    renderAppBatches();
 }
 
 
@@ -1049,6 +1935,13 @@ function renderChapters(batchId, subjectId) {
 
         }
 
+        function hasCompletedTestResult(testId) {
+            return getSavedQuestions().some(item =>
+                item && item.type === 'test' && String(item.testId) === String(testId) &&
+                item.savedAt && item.testName
+            );
+        }
+
         function openTests(batchId, subjectId, chapterId) {
             const batch = (localData.batches || []).find(b => b.id === batchId);
             const sub = (batch?.subjects || []).find(s => s.id === subjectId);
@@ -1058,10 +1951,16 @@ function renderChapters(batchId, subjectId) {
             const container = document.getElementById('test-list-container');
             container.innerHTML = '';
             (chap.tests || []).forEach(t => {
+                const relatedNotes = getNotesForTest(batch, sub, chap, t);
+                const hasResult = hasCompletedTestResult(t.id);
                 container.innerHTML += `
-                    <div class="test-card">
-                        <div><h4>${t.name}</h4><span style="font-size:10px; color:#64748b;">${(t.questions || []).length} Qs | +${t.positiveMarks || 4} / -${t.negativeMarks || 1}</span></div>
-                        <button class="start-btn" onclick="startTest('${batchId}', '${subjectId}', '${chapterId}', '${t.id}')">Start</button>
+                    <div class="test-card" style="align-items:flex-start; gap:8px;" onclick="startTest('${batchId}', '${subjectId}', '${chapterId}', '${t.id}')">
+                        <div style="flex:1; min-width:0;"><h4>${escapeHtml(t.name)}</h4><span style="font-size:10px; color:#64748b;">${(t.questions || []).length} Qs | +${t.positiveMarks || 4} / -${t.negativeMarks || 1}</span></div>
+                        <div style="display:flex; flex-direction:column; gap:6px; align-items:stretch;">
+                            <button class="start-btn" onclick="event.stopPropagation(); startTest('${batchId}', '${subjectId}', '${chapterId}', '${t.id}')">${hasResult ? 'Re-attempt' : 'Start'}</button>
+                            ${hasResult ? `<button class="test-notes-btn" style="background:#059669;" onclick="event.stopPropagation(); viewLatestTestAnalysis('${escapeJs(t.id)}')"><i class="fa-solid fa-chart-line"></i> View</button>` : ''}
+                            ${relatedNotes.length ? `<button class="test-notes-btn" onclick="event.stopPropagation(); openNotesForTest('${batchId}', '${subjectId}', '${chapterId}', '${t.id}')"><i class="fa-solid fa-book-open"></i> Notes</button>` : ''}
+                        </div>
                     </div>`;
             });
             showScreen('screen-test-list');
@@ -1139,6 +2038,15 @@ function renderChapters(batchId, subjectId) {
             startCountdownTimer();
         }
 
+        function leaveTestForNow() {
+            if (!currentActiveTest) return;
+            const shouldLeave = confirm('क्या आप टेस्ट को अभी छोड़ना चाहते हैं? आपकी वर्तमान progress सुरक्षित नहीं की जाएगी।');
+            if (!shouldLeave) return;
+            clearInterval(timerInterval);
+            document.getElementById('pauseModal').classList.remove('active');
+            showScreen('screen-test-list');
+        }
+
         function renderExamQuestion() {
             selectedOptionIndex = userAnswers[currentQuestionIndex] !== undefined ? userAnswers[currentQuestionIndex] : null;
             const qData = currentActiveTestQuestions[currentQuestionIndex];
@@ -1148,6 +2056,8 @@ function renderChapters(batchId, subjectId) {
 
             updateQuestionTimerUI();
             renderExamJumpStrip();
+            updateSavedQuestionButton();
+            updateSavedHeaderButtons();
 
             const optContainer = document.getElementById('optionsContainer');
             optContainer.innerHTML = '';
@@ -1200,6 +2110,13 @@ function renderChapters(batchId, subjectId) {
             } else {
                 calculateAndShowResult();
             }
+        }
+
+        function previewPreviousQuestion() {
+            if (currentQuestionIndex <= 0) return;
+            if (selectedOptionIndex !== null) userAnswers[currentQuestionIndex] = selectedOptionIndex;
+            currentQuestionIndex--;
+            renderExamQuestion();
         }
 
         function markAndNext() {
@@ -1256,6 +2173,31 @@ function renderChapters(batchId, subjectId) {
             let spentSec = timeSpentSec % 60;
             let formattedTimeSpent = `${spentMin.toString().padStart(2, '0')}:${spentSec.toString().padStart(2, '0')} Min`;
 
+            const completedTest = {
+                id: 'test-result::' + currentActiveTest.id + '::' + Date.now(),
+                attemptNumber: getSavedQuestions().filter(item => item.type === 'test' && item.testId === currentActiveTest.id).length + 1,
+                type: 'test',
+                source: 'completed-test',
+                testId: currentActiveTest.id,
+                testName: currentActiveTest.name,
+                score: `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(1)}`,
+                correct,
+                incorrect,
+                attempted,
+                total,
+                accuracy,
+                percentile,
+                timeSpent: formattedTimeSpent,
+                analysis: sectionStats,
+                answers: { ...userAnswers },
+                questionTimeSpent: { ...questionTimeSpent },
+                savedAt: new Date().toISOString()
+            };
+            const savedResults = getSavedQuestions();
+            savedResults.unshift(completedTest);
+            saveSavedQuestions(savedResults);
+            updateStudentActivityStats();
+
             document.getElementById('resTotalMarks').innerText = `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(1)}`;
             document.getElementById('resPercentile').innerText = `${percentile}%`;
             document.getElementById('resTimeSpent').innerText = formattedTimeSpent;
@@ -1275,7 +2217,57 @@ function renderChapters(batchId, subjectId) {
                     </div>`;
             }
 
+            document.getElementById('resTestTitle').innerText = currentActiveTest.name || 'Test Result';
+            updateCutoffAnalysis();
             showScreen('screen-result');
+        }
+
+        function updateCutoffAnalysis() {
+            const result = document.getElementById('cutoffResult');
+            const category = document.getElementById('cutoffCategory')?.value || 'general';
+            if (!result || !currentActiveTest) return;
+
+            const cutoffRanges = { general: [70, 70], obc: [65, 65], sc: [60, 60], st: [60, 60] };
+            const [cutoff] = cutoffRanges[category] || cutoffRanges.general;
+            const total = currentActiveTestQuestions.length || 1;
+            const answered = Object.keys(userAnswers).length;
+            let correct = 0;
+            currentActiveTestQuestions.forEach((question, index) => {
+                const answer = question.answer !== undefined ? question.answer : question.correct;
+                if (userAnswers[index] !== undefined && userAnswers[index] === answer) correct++;
+            });
+            const percentage = Math.round((correct / total) * 100);
+            const cleared = percentage >= cutoff;
+            result.className = 'cutoff-result ' + (cleared ? 'clear' : 'not-clear');
+            result.innerHTML = cleared
+                ? `✅ ${category.toUpperCase()} cutoff clear — ${percentage}% (required ${cutoff}%)`
+                : `📊 ${category.toUpperCase()} cutoff: ${percentage}% — clear करने के लिए ${cutoff}% चाहिए`;
+
+            if (cleared) {
+                const celebration = document.getElementById('cutoffCelebration');
+                if (celebration) {
+                    celebration.classList.remove('show');
+                    void celebration.offsetWidth;
+                    celebration.classList.add('show');
+                    setTimeout(() => celebration.classList.remove('show'), 1900);
+                }
+            }
+        }
+
+        function goBackFromResult() {
+            showScreen('screen-test-list');
+        }
+
+        function reattemptCurrentTest() {
+            if (!currentActiveTest) return;
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            markedQuestions = [];
+            questionTimeSpent = {};
+            remainingSeconds = totalTimeSeconds;
+            startCountdownTimer();
+            renderExamQuestion();
+            showScreen('screen-exam');
         }
 
         function openSolutionView() {
@@ -1313,6 +2305,7 @@ function renderChapters(batchId, subjectId) {
             }
 
             renderSolutionJumpStrip();
+            updateSavedHeaderButtons();
 
             const optContainer = document.getElementById('solOptionsContainer');
             optContainer.innerHTML = '';
@@ -1456,6 +2449,196 @@ function renderChapters(batchId, subjectId) {
             }
         }
 
+        /* --- PDF NOTES FUNCTIONS --- */
+
+        function getNotes() {
+            return Array.isArray(localData.notes) ? localData.notes : [];
+        }
+
+        function getNotesForTest(batch, subject, chapter, test) {
+            const same = (a, b) => String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase();
+            return getNotes().filter(note => {
+                const subjectMatch = same(note.subject, subject.name) || same(note.subjectId, subject.id);
+                const chapterMatch = same(note.chapter, chapter.name) || same(note.chapterId, chapter.id);
+                const testMatch = !note.testName && !note.testId || same(note.testName, test.name) || same(note.testId, test.id);
+                return subjectMatch && chapterMatch && testMatch;
+            });
+        }
+
+        function openNotesForTest(batchId, subjectId, chapterId, testId) {
+            const batch = (localData.batches || []).find(item => item.id === batchId);
+            const subject = batch && (batch.subjects || []).find(item => item.id === subjectId);
+            const chapter = subject && (subject.chapters || []).find(item => item.id === chapterId);
+            const test = chapter && (chapter.tests || []).find(item => item.id === testId);
+            if (!batch || !subject || !chapter || !test) return;
+            renderStudentNotes(getNotesForTest(batch, subject, chapter, test), `${test.name} — Notes`);
+            showScreen('screen-notes');
+        }
+
+        function renderStudentNotes(notesOverride, heading) {
+            const container = document.getElementById('studentNotesContainer');
+            if (!container) return;
+            const notes = notesOverride || getNotes();
+            const notesHeading = heading || 'PDF Notes';
+            const notesHeader = document.querySelector('#screen-notes .nav-back-header h3');
+            if (notesHeader) notesHeader.innerText = notesHeading;
+            if (!notes.length) {
+                container.innerHTML = '<div class="notes-empty"><i class="fa-solid fa-file-pdf" style="font-size:30px; margin-bottom:8px;"></i><br>अभी कोई Notes उपलब्ध नहीं हैं।</div>';
+                return;
+            }
+
+            const grouped = {};
+            notes.forEach(note => {
+                const subject = note.subject || 'अन्य विषय';
+                const chapter = note.chapter || note.title || 'सामान्य अध्याय';
+                if (!grouped[subject]) grouped[subject] = {};
+                if (!grouped[subject][chapter]) grouped[subject][chapter] = [];
+                grouped[subject][chapter].push(note);
+            });
+
+            container.innerHTML = Object.keys(grouped).map(subject => `
+                <section>
+                    <h2 class="note-subject-heading">${escapeHtml(subject)}</h2>
+                    ${Object.keys(grouped[subject]).map(chapter => `
+                        <div class="note-card">
+                            <h3 class="note-chapter-heading">${escapeHtml(chapter)}</h3>
+                            ${grouped[subject][chapter].map(note => `
+                                <h4>${escapeHtml(note.title || 'पूरा Notes')}</h4>
+                                ${note.testName ? `<div style="font-size:12px;color:#7c3aed;font-weight:700;margin-bottom:6px;"><i class="fa-solid fa-file-lines"></i> ${escapeHtml(note.testName)}</div>` : ''}
+                                <div class="note-content">${escapeHtml(note.text || '')}</div>
+                                <div class="note-actions">
+                                    <button type="button" class="note-action-btn note-read-btn" onclick="readTextNote('${escapeJs(note.id)}')">Read Message</button>
+                                    <button type="button" class="note-action-btn note-download-btn" onclick="downloadTextNote('${escapeJs(note.id)}')">Download Message</button>
+                                </div>`).join('')}
+                        </div>`).join('')}
+                </section>`).join('');
+        }
+
+        function saveAdminNote(event) {
+            event.preventDefault();
+            const subject = document.getElementById('adminNoteSubject').value.trim();
+            const chapter = document.getElementById('adminNoteChapter').value.trim();
+            const title = document.getElementById('adminNoteTitle').value.trim();
+            const testNameField = document.getElementById('adminNoteTest');
+            const testName = testNameField ? testNameField.value.trim() : '';
+            const text = document.getElementById('adminNoteText').value.trim();
+            if (!subject || !chapter || !title || !text) {
+                alert('कृपया Notes का Title और Text दर्ज करें।');
+                return;
+            }
+            localData.notes = getNotes();
+            localData.notes.push({ id: 'note_' + Date.now(), subject, chapter, testName, title, text, isPaid: document.getElementById('adminNoteIsPaid').checked, price: parseInt(document.getElementById('adminNotePrice').value, 10) || 0 });
+            document.getElementById('adminNoteSubject').value = '';
+            document.getElementById('adminNoteChapter').value = '';
+            document.getElementById('adminNoteTitle').value = '';
+            if (testNameField) testNameField.value = '';
+            document.getElementById('adminNoteText').value = '';
+            scheduleSaveToDb();
+            renderAdminNotes();
+            alert('Text Notes सेव कर दिए गए हैं।');
+        }
+
+
+
+        function readTextNote(noteId) {
+            const note = getNotes().find(item => item.id === noteId);
+            if (!note) return;
+            if (note.isPaid && !isUnlocked(note.id)) {
+                openUnlockModal(note.id, note.title, note.price || 99);
+                return;
+            }
+            const win = window.open('', '_blank');
+            if (!win) return alert('कृपया popup अनुमति दें।');
+            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.7;color:#111827;white-space:pre-wrap}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}</style></head><body><h1>' + escapeHtml(note.title) + '</h1>' + escapeHtml(note.text || note.url || '') + '</body></html>');
+            win.document.close();
+        }
+
+        function downloadTextNote(noteId) {
+            const note = getNotes().find(item => item.id === noteId);
+            if (!note) return;
+            if (note.isPaid && !isUnlocked(note.id)) {
+                openUnlockModal(note.id, note.title, note.price || 99);
+                return;
+            }
+            const html = '<!doctype html><html><head><meta charset="UTF-8"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;padding:35px;line-height:1.7;white-space:pre-wrap}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}</style></head><body><h1>' + escapeHtml(note.title) + '</h1>' + escapeHtml(note.text || note.url || '') + '</body></html>';
+            const win = window.open('', '_blank');
+            if (!win) return alert('कृपया popup अनुमति दें।');
+            win.document.write(html + '<script>window.onload=function(){window.print();}<\/script>');
+            win.document.close();
+        }
+
+        function deleteAdminNote(noteId) {
+            if (!confirm('क्या आप इस PDF Note को हटाना चाहते हैं?')) return;
+            localData.notes = getNotes().filter(note => note.id !== noteId);
+            scheduleSaveToDb();
+            renderAdminNotes();
+        }
+
+        function renderAdminNotes() {
+            // Text notes are stored locally in the database and rendered as PDF on demand.
+            const container = document.getElementById('adminNotesList');
+            if (!container) return;
+            container.innerHTML = getNotes().map(note => `
+                <div class="question-item-card">
+                    <div style="min-width:0;">
+                        <div style="font-weight:700; font-size:12px;">${escapeHtml(note.title)}</div>
+                        <div style="font-size:10px; color:#64748b; overflow-wrap:anywhere;">${escapeHtml(note.url)}</div>
+                    </div>
+                    <button type="button" class="action-icon-btn delete-btn" onclick="deleteAdminNote('${note.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                </div>`).join('') || '<p style="font-size:11px; color:#64748b;">अभी कोई PDF Note नहीं है।</p>';
+        }
+
+        function escapeHtml(value) {
+            return String(value || '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
+        }
+
+        function normalizeExternalUrl(value) {
+            let url = String(value || '').trim();
+            if (!url) return '';
+            if (!/^https?:\/\//i.test(url)) url = 'https://' + url.replace(/^\/+/, '');
+            return url;
+        }
+
+        function socialUrl(value) {
+            const url = normalizeExternalUrl(value);
+            return url ? escapeHtml(url) : '#';
+        }
+
+        function openSocialLink(event, value) {
+            const url = normalizeExternalUrl(value);
+            if (!url) {
+                event.preventDefault();
+                return;
+            }
+            event.preventDefault();
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function safeUrl(value) {
+            const url = normalizeExternalUrl(value);
+            return url ? escapeHtml(url) : '#';
+        }
+
+        function escapeJs(value) {
+            return String(value || '')
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/\r?\n/g, '\\n');
+        }
+
+        function openPdfNote(value) {
+            const url = String(value || '').trim();
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                alert('यह PDF लिंक मान्य नहीं है। कृपया Admin Panel में सही https:// लिंक सेव करें।');
+                return;
+            }
+
+            const popup = window.open(url, '_blank', 'noopener,noreferrer');
+            if (!popup) {
+                window.location.href = url;
+            }
+        }
+
         /* --- ADMIN PANEL JS FUNCTIONS --- */
 
         function autoDistributeFields() {
@@ -1516,6 +2699,7 @@ function renderChapters(batchId, subjectId) {
 
             updateSmartSubjects();
             updatePromptSubjects();
+            populateBannerBatchSelect();
         }
 
         function addBatch(e) {
@@ -1553,7 +2737,10 @@ function togglePriceField() {
     const negativeMark = document.getElementById('newNegativeMarkInput').value;
 
     const isPaid = document.getElementById('adminIsPaid').checked;
-    const price = parseInt(document.getElementById('adminSubjectPrice').value) || 0;
+    const price6Months = parseInt(document.getElementById('adminPrice6Months').value, 10) || 99;
+    const price1Year = parseInt(document.getElementById('adminPrice1Year').value, 10) || 149;
+    const priceLifetime = parseInt(document.getElementById('adminPriceLifetime').value, 10) || 299;
+    const price = price6Months || price1Year || priceLifetime || 0;
 
     const batch = (localData.batches || []).find(b => b.id === batchId);
     if (!batch) return;
@@ -1565,14 +2752,24 @@ function togglePriceField() {
         sub = { 
             id: 'subj_' + Date.now(), 
             name: subName, 
-            isPaid: isPaid, 
-            price: price, 
+            isPaid: isPaid,
+            price: price,
+            planPrices: {
+                '6months': price6Months,
+                '1year': price1Year,
+                lifetime: priceLifetime
+            },
             chapters: [] 
         };
         batch.subjects.push(sub);
     } else {
         sub.isPaid = isPaid;
         sub.price = price;
+        sub.planPrices = {
+            '6months': price6Months,
+            '1year': price1Year,
+            lifetime: priceLifetime
+        };
     }
 
 
@@ -1933,8 +3130,19 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
                     batch.subjects = batch.subjects || [];
                     let sub = batch.subjects.find(s => (s.name || '').toLowerCase() === (data.subject || "सामान्य").toLowerCase());
                     if (!sub) {
-                        sub = { id: 'subj_' + Date.now(), name: data.subject || "सामान्य", chapters: [] };
+                        sub = {
+                            id: 'subj_' + Date.now(),
+                            name: data.subject || "सामान्य",
+                            isPaid: true,
+                            price: 99,
+                            planPrices: { '6months': 99, '1year': 149, lifetime: 299 },
+                            chapters: []
+                        };
                         batch.subjects.push(sub);
+                    } else {
+                        sub.isPaid = true;
+                        sub.planPrices = sub.planPrices || { '6months': 99, '1year': 149, lifetime: 299 };
+                        sub.price = sub.price || 99;
                     }
 
                     sub.chapters = sub.chapters || [];
@@ -2000,11 +3208,7 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
       { id: "reasoning", name: "रीज़निंग", isPaid: true, price: 49 }
     ];
 
-    // 2. अनलॉक स्टेटस चेक करने का फ़ंक्शन
-    function isUnlocked(subjectId) {
-      return localStorage.getItem('unlocked_' + subjectId) === 'true';
-    }
-
+    // 2. अनलॉक स्टेटस अब expiry-based access record से आता है।
     // 3. सब्जेक्ट पर क्लिक होने पर चेक करने का लॉजिक
     function handleSubjectClick(subjectId) {
     const subject = subjectsData.find(s => s.id === subjectId);
@@ -2018,57 +3222,303 @@ JSON की संरचना (Structure) ठीक नीचे दी गई 
 // ---- ये 3 JS फ़ंक्शंस यहाँ होने ज़रूरी हैं ----
 
 
-function openUnlockModal(subId, subName, price) {
-    currentLockSubId = subId;
-    document.getElementById('modalSubjectTitle').innerText = subName;
-    document.getElementById('modalSubjectPrice').innerText = price || 99;
-    document.getElementById('unlockModal').style.display = 'flex';
-}
+    // पुराना purchase flow हटाया गया है। Access केवल Admin द्वारा activate होगा।
 
-function closeUnlockModal() {
-    document.getElementById('unlockModal').style.display = 'none';
-    currentLockSubId = null;
-}
+    </script>
 
-function processPurchase() {
-    if (!currentLockSubId) return;
-    localStorage.setItem('unlocked_' + currentLockSubId, 'true');
-    alert("🎉 बधाई हो! सब्जेक्ट सफलतापूर्वक अनलॉक हो गया है।");
-    closeUnlockModal();
-    if (typeof renderAppBatches === 'function') renderAppBatches();
-    showScreen('screen-syllabus');
-}
+    <script>
+        // Notes navigation: Subject card -> Chapter card -> Note card -> Reader page.
+        let notesNavigationState = { notes: [], heading: 'PDF Notes', subject: '', chapter: '' };
 
-</script>
+        function renderStudentNotes(notesOverride, heading) {
+            const container = document.getElementById('studentNotesContainer');
+            if (!container) return;
+            const notes = notesOverride || getNotes();
+            notesNavigationState = { notes, heading: heading || 'PDF Notes', subject: '', chapter: '' };
+            renderNotesSubjects();
+        }
 
+        function renderNotesSubjects() {
+            const container = document.getElementById('studentNotesContainer');
+            const groups = {};
+            notesNavigationState.notes.forEach(note => {
+                const subject = note.subject || 'अन्य विषय';
+                if (!groups[subject]) groups[subject] = [];
+                groups[subject].push(note);
+            });
+            if (!Object.keys(groups).length) {
+                container.innerHTML = '<div class="notes-empty">अभी कोई Notes उपलब्ध नहीं हैं।</div>';
+                return;
+            }
+            container.innerHTML = '<h2 class="note-subject-heading">' + escapeHtml(notesNavigationState.heading) + '</h2>' +
+                Object.keys(groups).map(subject => `<div class="notes-navigation-card" onclick="openNotesSubject('${escapeJs(subject)}')"><h3><i class="fa-solid fa-book-open"></i> ${escapeHtml(subject)}</h3><p>${groups[subject].length} Notes उपलब्ध हैं — खोलने के लिए क्लिक करें</p></div>`).join('');
+        }
 
-    <!-- 1. Payment Pop-Up HTML (इसे </body> से ठीक ऊपर रखें) -->
+        function openNotesSubject(subject) {
+            notesNavigationState.subject = subject;
+            const notes = notesNavigationState.notes.filter(note => (note.subject || 'अन्य विषय') === subject);
+            const groups = {};
+            notes.forEach(note => {
+                const chapter = note.chapter || 'सामान्य अध्याय';
+                if (!groups[chapter]) groups[chapter] = [];
+                groups[chapter].push(note);
+            });
+            const container = document.getElementById('studentNotesContainer');
+            container.innerHTML = `<div class="nav-back-header"><button class="nav-back-btn" onclick="renderNotesSubjects()"><i class="fa-solid fa-arrow-left"></i></button><h3 style="font-size:14px;">${escapeHtml(subject)}</h3></div>` +
+                Object.keys(groups).map(chapter => `<div class="notes-navigation-card" onclick="openNotesChapter('${escapeJs(chapter)}')"><h3><i class="fa-solid fa-folder-open"></i> ${escapeHtml(chapter)}</h3><p>${groups[chapter].length} Notes — आगे पढ़ने के लिए क्लिक करें</p></div>`).join('');
+        }
+
+        function openNotesChapter(chapter) {
+            notesNavigationState.chapter = chapter;
+            const notes = notesNavigationState.notes.filter(note => (note.subject || 'अन्य विषय') === notesNavigationState.subject && (note.chapter || 'सामान्य अध्याय') === chapter);
+            const container = document.getElementById('studentNotesContainer');
+            container.innerHTML = `<div class="nav-back-header"><button class="nav-back-btn" onclick="openNotesSubject('${escapeJs(notesNavigationState.subject)}')"><i class="fa-solid fa-arrow-left"></i></button><h3 style="font-size:14px;">${escapeHtml(chapter)}</h3></div>` +
+                notes.map(note => `<div class="notes-navigation-card" onclick="openNoteReader('${escapeJs(note.id)}')"><h3><i class="fa-solid fa-file-lines"></i> ${escapeHtml(note.title || 'पूरा Notes')}</h3><p>${note.isPaid ? '🔒 Paid Notes' : '📖 पढ़ने के लिए क्लिक करें'}</p></div>`).join('');
+        }
+
+        function openNoteReader(noteId) {
+            const note = notesNavigationState.notes.find(item => item.id === noteId);
+            if (!note) return;
+            if (note.isPaid && !isUnlocked(note.id)) {
+                openUnlockModal(note.id, note.title, note.price || 99);
+                return;
+            }
+            const container = document.getElementById('studentNotesContainer');
+            const noteText = note.text || '';
+            const safeNoteId = escapeJs(note.id);
+            const speechParts = noteText.match(/[^.!?।]+[.!?।]?/g) || [noteText];
+            let wordIndex = 0;
+            const highlightedText = noteText.split(/(\s+)/).map(part => {
+                if (/\s+/.test(part)) return escapeHtml(part);
+                const html = `<span class="speech-word" data-word-index="${wordIndex}">${escapeHtml(part)}</span>`;
+                wordIndex++;
+                return html;
+            }).join('');
+            container.innerHTML = `<div class="nav-back-header"><button class="nav-back-btn" onclick="stopNoteSpeech(); openNotesChapter('${escapeJs(notesNavigationState.chapter)}')"><i class="fa-solid fa-arrow-left"></i></button><h3 style="font-size:14px;">${escapeHtml(note.title || 'Notes')}</h3></div><article class="notes-reader"><div class="notes-reader-top"><h2>${escapeHtml(note.title || 'पूरा Notes')}</h2><button class="notes-reader-speaker-btn" id="speakNoteButton" onclick="toggleNoteSpeech('${safeNoteId}')"><i class="fa-solid fa-volume-high"></i> सुनें</button></div><div class="reader-content" id="readerContent">${highlightedText}</div><div class="notes-reader-actions"><button class="notes-read-option" onclick="readTextNote('${safeNoteId}')"><i class="fa-solid fa-book-open"></i> Read Notes</button><button class="note-action-btn note-download-btn" style="width:100%;margin-top:0;" onclick="downloadTextNote('${safeNoteId}')"><i class="fa-solid fa-download"></i> Download / PDF</button><button class="note-action-btn" style="width:100%;margin-top:0;background:#7c3aed;" onclick="savePdfNote(${JSON.stringify(note).replace(/</g, '\\u003c')})"><i class="fa-solid fa-bookmark"></i> Save PDF</button></div></article>`;
+        }
+
+    </script>
+
+    <script>
+        // Text notes are rendered by the browser; students can read or print/save them as PDF.
+        function saveAdminNote(event) {
+            event.preventDefault();
+            const subject = document.getElementById('adminNoteSubject').value.trim();
+            const chapter = document.getElementById('adminNoteChapter').value.trim();
+            const title = document.getElementById('adminNoteTitle').value.trim();
+            const testNameField = document.getElementById('adminNoteTest');
+            const testName = testNameField ? testNameField.value.trim() : '';
+            const text = document.getElementById('adminNoteText').value.trim();
+            if (!subject || !chapter || !title || !text) {
+                alert('कृपया Notes का Title और Text दर्ज करें।');
+                return;
+            }
+            localData.notes = getNotes().filter(note => note.text || !note.url);
+            localData.notes.push({ id: 'note_' + Date.now(), subject, chapter, title: title, text: text, isPaid: document.getElementById('adminNoteIsPaid').checked, price: parseInt(document.getElementById('adminNotePrice').value, 10) || 0 });
+            document.getElementById('adminNoteSubject').value = '';
+            document.getElementById('adminNoteChapter').value = '';
+            document.getElementById('adminNoteTitle').value = '';
+            if (testNameField) testNameField.value = '';
+            document.getElementById('adminNoteText').value = '';
+            scheduleSaveToDb();
+            renderAdminNotes();
+            alert('Text Notes सेव कर दिए गए हैं।');
+        }
+
+        let noteSpeechUtterance = null;
+        let noteSpeechChunks = [];
+        let noteSpeechChunkIndex = 0;
+        let noteSpeechGlobalOffset = 0;
+        let noteSpeechFullText = '';
+        let noteSpeechVoice = null;
+        let activeSpeechChunkIndex = -1;
+
+        function clearSpeechHighlight() {
+            document.querySelectorAll('.speech-chunk.speaking, .speech-char.speaking, .speech-word.speaking').forEach(chunk => chunk.classList.remove('speaking'));
+        }
+
+        let speechScrollFrame = null;
+
+        function highlightSpeechChunk(index) {
+            clearSpeechHighlight();
+            const words = document.querySelectorAll('#readerContent .speech-word');
+            const word = words[Math.max(0, Math.min(index, words.length - 1))];
+            const reader = document.getElementById('readerContent');
+            if (!word || !reader) return;
+
+            word.classList.add('speaking');
+
+            // DOM rect से position लें, क्योंकि inline Hindi words का offsetTop
+            // mobile browsers में कभी-कभी गलत मिल सकता है।
+            if (speechScrollFrame) cancelAnimationFrame(speechScrollFrame);
+            speechScrollFrame = requestAnimationFrame(() => {
+                const readerRect = reader.getBoundingClientRect();
+                const wordRect = word.getBoundingClientRect();
+                const wordCenter = wordRect.top - readerRect.top + reader.scrollTop + wordRect.height / 2;
+                const targetTop = Math.max(0, Math.min(
+                    reader.scrollHeight - reader.clientHeight,
+                    wordCenter - reader.clientHeight / 2
+                ));
+                reader.scrollTo({ top: targetTop, behavior: 'smooth' });
+            });
+        }
+
+        function stopNoteSpeech() {
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            noteSpeechUtterance = null;
+            noteSpeechChunks = [];
+            noteSpeechChunkIndex = 0;
+            noteSpeechGlobalOffset = 0;
+            noteSpeechFullText = '';
+            noteSpeechVoice = null;
+            activeSpeechChunkIndex = -1;
+            clearSpeechHighlight();
+            const button = document.getElementById('speakNoteButton');
+            if (button) button.innerHTML = '<i class="fa-solid fa-volume-high"></i> सुनें';
+        }
+
+        function visibleCharIndex(rawIndex) {
+            const text = noteSpeechFullText || '';
+            const beforeText = text.slice(0, Math.max(0, rawIndex));
+            return (beforeText.match(/\S+/g) || []).length;
+        }
+
+        function speakNextNoteChunk() {
+            if (!noteSpeechChunks.length || noteSpeechChunkIndex >= noteSpeechChunks.length) {
+                stopNoteSpeech();
+                return;
+            }
+
+            // आवाज़ पूरे sentence को एक साथ बोलेगी; अक्षर केवल visual highlight होंगे।
+            const sentence = noteSpeechChunks[noteSpeechChunkIndex++];
+            const start = noteSpeechGlobalOffset;
+            noteSpeechGlobalOffset += sentence.length;
+            const sentenceWords = sentence.match(/\S+/g) || [];
+            const sentenceStartWord = visibleCharIndex(start);
+            let fallbackIndex = 0;
+            const highlightTimer = window.setInterval(() => {
+                if (fallbackIndex < sentenceWords.length) {
+                    highlightSpeechChunk(sentenceStartWord + fallbackIndex++);
+                }
+            }, Math.max(180, (sentence.length * 75) / Math.max(1, sentenceWords.length)));
+
+            noteSpeechUtterance = new SpeechSynthesisUtterance(sentence);
+            noteSpeechUtterance.lang = noteSpeechVoice ? noteSpeechVoice.lang : 'hi-IN';
+            if (noteSpeechVoice) noteSpeechUtterance.voice = noteSpeechVoice;
+            noteSpeechUtterance.rate = 0.78;
+            noteSpeechUtterance.pitch = 0.9;
+            noteSpeechUtterance.volume = 1;
+            highlightSpeechChunk(visibleCharIndex(start));
+            noteSpeechUtterance.onboundary = function (event) {
+                if (typeof event.charIndex === 'number') {
+                    const spokenPart = sentence.slice(0, event.charIndex);
+                    const spokenWord = (spokenPart.match(/\S+/g) || []).length;
+                    highlightSpeechChunk(sentenceStartWord + spokenWord);
+                }
+            };
+            noteSpeechUtterance.onend = function () {
+                window.clearInterval(highlightTimer);
+                highlightSpeechChunk(Math.max(0, visibleCharIndex(start + sentence.length) - 1));
+                window.setTimeout(speakNextNoteChunk, 120);
+            };
+            noteSpeechUtterance.onerror = function () {
+                window.clearInterval(highlightTimer);
+                stopNoteSpeech();
+                alert('Speaker आवाज़ नहीं चला सका। कृपया फोन की media volume और browser की आवाज़ जाँचें।');
+            };
+            window.speechSynthesis.speak(noteSpeechUtterance);
+        }
+
+        function toggleNoteSpeech(noteId) {
+            if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+                alert('इस browser/device में Text-to-Speech सुविधा उपलब्ध नहीं है।');
+                return;
+            }
+
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                stopNoteSpeech();
+                return;
+            }
+
+            const note = getNotes().find(item => String(item.id) === String(noteId));
+            const text = note && String(note.text || '').trim();
+            if (!text) {
+                alert('इस Note में पढ़ने के लिए कोई टेक्स्ट नहीं है।');
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+            noteSpeechFullText = text;
+            // पूरे sentence को एक ही utterance में बोलें; अक्षर अलग-अलग utterance नहीं हैं।
+            noteSpeechChunks = text.match(/[^.!?।]+[.!?।]?/g)
+                ?.map(chunk => chunk.trim())
+                .filter(Boolean) || [text];
+            noteSpeechGlobalOffset = 0;
+            const voices = window.speechSynthesis.getVoices();
+            noteSpeechVoice = voices.find(voice => /^hi(-|_)/i.test(voice.lang)) || voices.find(voice => /hindi|हिंदी|हिन्दी/i.test(voice.name)) || voices[0] || null;
+            // Reader में बने हुए sentence spans और speech chunks बिल्कुल समान रखें,
+            // ताकि बोलते समय सही टेक्स्ट ही highlight और auto-scroll हो।
+            // Speech में पूरे sentence भेजें; अक्षरों को अलग-अलग utterance न बनाएं।
+            // इससे “कोशिका” जैसे शब्द टूटकर नहीं बोलेंगे।
+            noteSpeechChunks = text.match(/[^.!?।]+[.!?।]?/g)
+                ?.map(chunk => chunk.trim())
+                .filter(Boolean) || [text];
+            noteSpeechGlobalOffset = 0;
+            noteSpeechChunkIndex = 0;
+            const button = document.getElementById('speakNoteButton');
+            if (button) button.innerHTML = '<i class="fa-solid fa-stop"></i> रोकें';
+            speakNextNoteChunk();
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = function () {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        function findTextNote(noteId) {
+            return getNotes().find(note => note.id === noteId);
+        }
+
+        function readTextNote(noteId) {
+            const note = findTextNote(noteId);
+            if (!note) return;
+            const win = window.open('', '_blank');
+            if (!win) return alert('कृपया browser में popup अनुमति दें।');
+            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><title>' + escapeHtml(note.title) + '</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:25px;line-height:1.7;color:#111827}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}.content{white-space:pre-wrap}</style></head><body><h1>' + escapeHtml(note.title) + '</h1><div class="content">' + escapeHtml(note.text || '') + '</div></body></html>');
+            win.document.close();
+        }
+
+        function downloadTextNote(noteId) {
+            const note = findTextNote(noteId);
+            if (!note) return;
+            const win = window.open('', '_blank');
+            if (!win) return alert('कृपया browser में popup अनुमति दें।');
+            win.document.write('<!doctype html><html><head><meta charset="UTF-8"><title>' + escapeHtml(note.title) + '</title><style>@page{size:A4;margin:20mm}body{font-family:Arial,sans-serif;line-height:1.7;color:#111827}h1{border-bottom:2px solid #4f46e5;padding-bottom:10px}.content{white-space:pre-wrap}</style></head><body><h1>' + escapeHtml(note.title) + '</h1><div class="content">' + escapeHtml(note.text || '') + '</div><script>window.onload=function(){window.print();}<\\/script></body></html>');
+            win.document.close();
+        }
+    </script>
+
+    <!-- Access status popup: payment system हटाया गया है -->
     <div id="unlockModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
         <div style="background:#fff; width:90%; max-width:380px; padding:20px; border-radius:16px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); font-family:sans-serif;">
             <div style="font-size:36px; margin-bottom:4px;">🔒</div>
             <h3 id="modalSubjectTitle" style="font-size:18px; margin-bottom:4px; color:#1e293b;">Subject Name</h3>
-            <p style="color:#64748b; font-size:12px; margin-bottom:12px;">इस सब्जेक्ट को अनलॉक करने के लिए ₹<span id="modalSubjectPrice">99</span> का भुगतान करें</p>
+            <p style="color:#64748b; font-size:12px; margin-bottom:12px;">इस subject का access अभी active नहीं है।</p>
             
-            <!-- UPI Details Box -->
-<div style="background:#f8fafc; border:1px dashed #2563eb; padding:12px; border-radius:12px; font-size:13px; text-align:left; margin-bottom:14px;">
-    <p style="margin:0 0 6px 0; color:#475569;"><b>1. PhonePe / Paytm / GPay / UPI:</b></p>
-    <p style="margin:0 0 10px 0; font-weight:bold; color:#2563eb; font-size:16px; display:flex; justify-content:space-between; align-items:center;">
-        <span id="displayAdminPhone">8102434723</span> 
-        <button onclick="navigator.clipboard.writeText('9135706439'); alert('UPI Number Copied!')" style="background:#e0e7ff; color:#3730a3; border:none; padding:3px 8px; border-radius:4px; font-size:11px; cursor:pointer;">Copy</button>
-    </p>
-    <p style="margin:0; color:#64748b; font-size:11px;">*पेमेंट करने के बाद स्क्रीनशॉट WhatsApp पर भेजें।*</p>
-</div>
-
-
-            <!-- Buttons -->
-            <div style="display:flex; flex-direction:column; gap:8px;">
-                <button onclick="openUpiApp()" style="width:100%; background:#16a34a; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:bold; font-size:14px; cursor:pointer;">
-                    💸 Pay via UPI App (Direct)
-                </button>
-                <button onclick="sendWhatsAppMessage()" style="width:100%; background:#25d366; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:bold; font-size:14px; cursor:pointer;">
-                    💬 Send Screenshot on WhatsApp
-                </button>
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:14px; border-radius:12px; margin-bottom:14px; color:#1e40af; font-size:13px; line-height:1.6;">
+                अपना plan चुनकर purchase request भेजें। Payment आपके बताए हुए माध्यम से verify होने के बाद Admin access activate करेगा।
             </div>
+            <input id="purchaseStudentId" type="text" placeholder="आपका Student ID" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px; margin-bottom:8px; font-size:13px;">
+            <select id="purchasePlan" onchange="updatePurchasePlanPrice()" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px; margin-bottom:8px; font-size:13px; background:#fff;">
+                <option value="6months">6 महीने</option>
+                <option value="1year">1 साल</option>
+                <option value="lifetime">Lifetime</option>
+            </select>
+            <div id="purchasePlanPrice" style="font-size:14px;font-weight:800;color:#2563eb;margin:4px 0 10px;">Price: ₹0</div>
+            <button onclick="submitPurchaseRequest()" style="width:100%; background:#16a34a; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Purchase Request भेजें</button>
+            <button onclick="sendPaymentScreenshotOnWhatsApp()" style="width:100%; background:#25D366; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:8px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp पर Screenshot भेजें</button>
+            <p style="font-size:10px; color:#64748b; margin:7px 0 0; line-height:1.4;">पहले payment screenshot सेव करें, फिर यह बटन दबाकर WhatsApp में attach करके भेजें।</p>
 
             <button onclick="closeUnlockModal()" style="width:100%; background:transparent; color:#64748b; border:none; padding:8px; font-size:13px; cursor:pointer; margin-top:8px;">
                 Close
@@ -2080,38 +3530,105 @@ function processPurchase() {
     <script>
         // ... आपका पहले से मौजूद सारा JS कोड यहाँ रहेगा ...
 
-        // ⚠️ पेमेंट वाला नया लॉजिक
-        const ADMIN_PHONE = "918102434723";   // 91 + आपका WhatsApp नंबर
-        const ADMIN_UPI_ID = "8102434723@mbk"; // आपकी UPI ID
+        // पुराना payment popup और direct purchase flow हटा दिया गया है।
+        // Admin panel से activate किया गया access ही student को उपलब्ध होगा।
+    </script>
+    <script>
+        // अंतिम speech handler: पूरे वाक्य को एक utterance में बोलता है।
+        // अक्षर केवल स्क्रीन पर highlight होते हैं, इसलिए “कोशिका” नहीं टूटती।
+        function toggleNoteSpeech(noteId) {
+            if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+                alert('इस browser/device में Text-to-Speech उपलब्ध नहीं है।');
+                return;
+            }
 
-        let currentLockSubId = null;
-        let currentSubName = "";
-        let currentSubPrice = "99";
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                stopNoteSpeech();
+                return;
+            }
 
-        function openUnlockModal(subId, subName, price) {
-            currentLockSubId = subId;
-            currentSubName = subName;
-            currentSubPrice = price || 99;
+            const note = getNotes().find(item => String(item.id) === String(noteId));
+            const text = note ? String(note.text || '').trim() : '';
+            if (!text) {
+                alert('इस Note में पढ़ने के लिए टेक्स्ट नहीं है।');
+                return;
+            }
 
-            document.getElementById('modalSubjectTitle').innerText = subName;
-            document.getElementById('modalSubjectPrice').innerText = currentSubPrice;
-            document.getElementById('unlockModal').style.display = 'flex';
+            stopNoteSpeech();
+            noteSpeechFullText = text;
+            noteSpeechChunks = text.match(/[^.!?।]+[.!?।]?/g)
+                ?.map(sentence => sentence.trim())
+                .filter(Boolean) || [text];
+            noteSpeechChunkIndex = 0;
+            noteSpeechGlobalOffset = 0;
+
+            const voices = window.speechSynthesis.getVoices();
+            noteSpeechVoice = voices.find(voice => /^hi-IN$/i.test(voice.lang))
+                || voices.find(voice => /^hi(-|_)/i.test(voice.lang))
+                || null;
+
+            const button = document.getElementById('speakNoteButton');
+            if (button) button.innerHTML = '<i class="fa-solid fa-stop"></i> रोकें';
+            speakNextNoteChunk();
+        }
+    </script>
+    <script>
+        const PROFILE_NAME_KEY = 'vidya_student_name';
+        const PROFILE_AVATAR_KEY = 'vidya_student_avatar';
+        const profileGirlAvatars = ['👧','👩','👩‍🎓','👩‍🏫','🧕'];
+        const profileBoyAvatars = ['👦','👨','👨‍🎓','👨‍🏫','🧑‍💻'];
+
+        function openProfileEditor() {
+            const modal = document.getElementById('profileModal');
+            const input = document.getElementById('studentNameInput');
+            if (!modal || !input) return;
+            input.value = localStorage.getItem(PROFILE_NAME_KEY) || '';
+            const selected = localStorage.getItem(PROFILE_AVATAR_KEY) || profileGirlAvatars[0];
+            document.getElementById('avatarOptions').innerHTML = [...profileGirlAvatars, ...profileBoyAvatars].map(avatar =>
+                `<button type="button" class="avatar-option ${avatar === selected ? 'selected' : ''}" data-avatar="${avatar}" onclick="selectProfileAvatar(this)">${avatar}</button>`
+            ).join('');
+            modal.classList.add('active');
         }
 
-        function closeUnlockModal() {
-            document.getElementById('unlockModal').style.display = 'none';
-            currentLockSubId = null;
+        function selectProfileAvatar(button) {
+            document.querySelectorAll('.avatar-option').forEach(item => item.classList.remove('selected'));
+            button.classList.add('selected');
         }
 
-        function openUpiApp() {
-            const upiUrl = `upi://pay?pa=${ADMIN_UPI_ID}&pn=VidyaTest&am=${currentSubPrice}&cu=INR&tn=Payment for ${currentSubName}`;
-            window.location.href = upiUrl;
+        function saveStudentProfile() {
+            const name = document.getElementById('studentNameInput')?.value.trim();
+            const selected = document.querySelector('.avatar-option.selected')?.dataset.avatar || profileGirlAvatars[0];
+            if (name) localStorage.setItem(PROFILE_NAME_KEY, name);
+            else localStorage.removeItem(PROFILE_NAME_KEY);
+            localStorage.setItem(PROFILE_AVATAR_KEY, selected);
+            applyStudentProfile();
+            closeProfileEditor();
         }
 
-        function sendWhatsAppMessage() {
-            const msg = encodeURIComponent(`नमस्ते Admin! 👋\n\nमैंने *${currentSubName}* (₹${currentSubPrice}) के लिए पेमेंट कर दिया है।\nकृपया मेरे अकाउंट को एक्सेस दें।\n\nसब्जेक्ट ID: ${currentLockSubId}`);
-            const whatsappUrl = `https://wa.me/${ADMIN_PHONE}?text=${msg}`;
-            window.open(whatsappUrl, '_blank');
+        function closeProfileEditor() {
+            document.getElementById('profileModal')?.classList.remove('active');
         }
+
+        function applyStudentProfile() {
+            const name = localStorage.getItem(PROFILE_NAME_KEY) || 'विद्याTest';
+            const avatar = localStorage.getItem(PROFILE_AVATAR_KEY) || '👤';
+            const greeting = document.getElementById('studentGreeting');
+            const avatarBox = document.getElementById('studentAvatar');
+            if (greeting) greeting.textContent = 'नमस्ते, विद्याTest 👋';
+            const role = document.getElementById('studentRole');
+            if (role) role.textContent = name;
+            if (avatarBox) avatarBox.innerHTML = avatar;
+        }
+
+        window.addEventListener('DOMContentLoaded', applyStudentProfile);
+    </script>
+    <script src="ranking.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                populateBannerBatchSelect();
+                renderAdminPromotionLists();
+            }, 0);
+        });
     </script>
 </body>
